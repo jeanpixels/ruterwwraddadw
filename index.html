@@ -136,7 +136,7 @@
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center sm:justify-between gap-2 text-center sm:text-left">
       <p class="flex items-center justify-center sm:justify-start gap-2" style="color: var(--text-secondary);">
         <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
-        <span><strong style="color: var(--text-primary);">Nota:</strong> No soy guía oficial de turismo; armo estas guías según mi experiencia para que vayas por tu cuenta. ¿Consultas o ayuda personalizada? <a href="#contacto" class="underline font-semibold text-amber-400 hover:text-amber-300">Escríbeme aquí</a>.</span>
+        <span><strong style="color: var(--text-primary);">Nota:</strong> No soy guía oficial de turismo; armo estas guías según mi experiencia para que vayas por tu cuenta. <a href="#contacto" class="underline font-semibold text-amber-400 hover:text-amber-300">Escríbeme aquí</a>.</span>
       </p>
       <div id="owner-active-pill" class="items-center gap-2 hidden">
         <button onclick="toggleOwnerView()" class="px-3 py-1 rounded-full text-[11px] font-semibold btn-crimson flex items-center gap-1.5">
@@ -166,17 +166,14 @@
           <span>Yapear</span>
           <span class="hidden md:inline">/ Apoyar</span>
         </a>
-
         <a href="#comunidad" onclick="showPublicView()" class="liquid-glass px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold hover:border-emerald-400 transition hidden md:inline-flex items-center gap-1.5">
           <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
           <span>Comunidad</span>
         </a>
-
         <a href="#contacto" onclick="showPublicView()" class="liquid-glass px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold hover:border-sky-400 transition hidden sm:inline-flex items-center gap-1.5">
           <i data-lucide="message-circle" class="w-4 h-4 text-sky-400"></i>
           <span>Contacto</span>
         </a>
-
         <button onclick="toggleTheme()" class="liquid-glass w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center hover:border-amber-400 transition" title="Cambiar tema">
           <i data-lucide="sun" id="theme-icon" class="w-4 h-4 text-amber-400"></i>
         </button>
@@ -185,7 +182,6 @@
   </header>
 
   <main id="public-view" class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-12 sm:space-y-16">
-
     <section class="text-center max-w-3xl mx-auto space-y-4 sm:space-y-5 pt-1 sm:pt-3">
       <div class="flex flex-wrap items-center justify-center gap-2">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold liquid-glass">
@@ -202,7 +198,7 @@
         Elige tu próximo destino y <span class="italic text-gold-highlight">abre la guía visual</span>.
       </h1>
 
-      <p id="ui-hero-subtitle" class="text-sm sm:text-base max-w-xl mx-auto" style="color: var(--text-secondary);">Toca cualquier portada para revisar la guía en tu pantalla o descargarla gratis antes de salir a la ruta.</p>
+      <p id="ui-hero-subtitle" class="text-sm sm:text-base max-w-xl mx-auto" style="color: var(--text-secondary);">Toca cualquier portada para revisar la guía en tu pantalla o abrirla a tamaño completo.</p>
 
       <div class="search-spotlight rounded-2xl p-1.5 sm:p-2.5 flex items-center gap-2 max-w-2xl mx-auto">
         <div class="pl-3 sm:pl-4 flex items-center pointer-events-none">
@@ -226,8 +222,8 @@
 
       <div id="empty-posters" class="liquid-glass rounded-3xl p-8 sm:p-10 text-center max-w-md mx-auto space-y-3 hidden">
         <i data-lucide="map-pinned" class="w-8 h-8 text-sky-400 mx-auto"></i>
-        <p class="font-brand text-base font-bold">No encontré esa ruta todavía</p>
-        <p class="text-xs" style="color: var(--text-secondary);">Prueba buscando con el nombre del lugar.</p>
+        <p class="font-brand text-base font-bold">Sin rutas disponibles</p>
+        <p class="text-xs" style="color: var(--text-secondary);">El catálogo está vacío o no coincide con tu búsqueda.</p>
         <button onclick="clearSearch()" class="btn-crimson px-4 py-2 rounded-xl text-xs font-semibold">Mostrar todas las guías</button>
       </div>
     </section>
@@ -255,7 +251,6 @@
               <span>🐧 ¡Aventura y Gloria!</span>
             </span>
           </div>
-
           <h2 id="ui-yape-title" class="font-hero text-2xl sm:text-4xl font-bold leading-snug">¿Te sirvió alguna guía para armar tu ruta?</h2>
           <p id="ui-yape-desc" class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">Estas guías visuales son gratis para que te animes a salir por tu cuenta. Si el contenido te ahorró tiempo, puedes invitarme un café o apoyar mi trabajo por Yape.</p>
         </div>
@@ -287,7 +282,6 @@
               <span class="text-[11px] block" style="color: var(--text-secondary);">Lo que nazca</span>
             </button>
           </div>
-
           <button onclick="openYapeModal('Apoyo General - Jean Pixels')" class="w-full btn-yape-smart py-3.5 px-4 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2">
             <i data-lucide="qr-code" class="w-4 h-4 text-[#10d9c4]"></i>
             <span>Yapear <span id="don-selected-label">S/ 5</span> (Ver QR o Número)</span>
@@ -309,7 +303,7 @@
             Únete al grupo de WhatsApp <span class="text-emerald-400">Aventura y Gloria</span>
           </h2>
           <p class="text-xs sm:text-sm leading-relaxed" style="color: var(--text-secondary);">
-            Un espacio para conversar con otros viajeros que van por su cuenta, pasar datos actuales del clima y resolver dudas.
+            Un espacio para conversar con otros viajeros, pasar datos actuales del clima y resolver dudas.
           </p>
         </div>
 
@@ -351,7 +345,6 @@
         </form>
       </div>
     </section>
-
   </main>
 
   <section id="owner-view" class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 space-y-8 hidden">
@@ -376,14 +369,13 @@
       </div>
     </div>
 
-    <!-- Panel de Estado Firebase Integrado -->
     <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4 border border-emerald-500/40">
       <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2 text-emerald-400">
         <i data-lucide="cloud" class="w-5 h-5"></i>
         <span>Estado de la Nube (Firebase Firestore Conectado)</span>
       </h3>
       <p id="cloud-status-desc" class="text-xs" style="color: var(--text-secondary);">
-        Tus llaves ya están incrustadas en el código. Cualquier cambio en guías o contadores se guarda automáticamente en la nube.
+        Tus llaves ya están incrustadas en el código. Cualquier cambio se guarda automáticamente en la nube.
       </p>
       <div class="flex flex-wrap gap-3 pt-1">
         <button onclick="testFirebaseConnectionReal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 flex items-center gap-1.5">
@@ -412,7 +404,7 @@
           <i data-lucide="download" class="w-4 h-4 text-amber-400"></i>
         </span>
         <strong id="metric-downloads" class="font-brand text-2xl sm:text-3xl font-extrabold block">0</strong>
-        <span class="text-[11px]" style="color: var(--text-secondary);">Archivos descargados</span>
+        <span class="text-[11px]" style="color: var(--text-secondary);">Aperturas completas</span>
       </div>
 
       <div class="liquid-glass rounded-2xl p-4 sm:p-5 space-y-1">
@@ -438,19 +430,22 @@
       <div class="lg:col-span-5 space-y-6">
         <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4">
           <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2">
-            <i data-lucide="file-up" class="w-5 h-5 text-amber-400"></i>
-            <span>1. Subir o Editar Guía Visual (.HTML)</span>
+            <i data-lucide="link" class="w-5 h-5 text-amber-400"></i>
+            <span>1. Añadir / Editar Guía (Vía URL)</span>
           </h3>
-
-          <label for="html-file-input" class="block border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer hover:border-amber-400 transition" style="border-color: var(--glass-border-highlight);">
-            <i data-lucide="upload-cloud" class="w-8 h-8 text-amber-400 mx-auto mb-1.5"></i>
-            <span class="font-semibold text-xs sm:text-sm block">Selecciona el archivo .HTML de tu guía</span>
-            <span id="uploaded-filename" class="text-[11px] block mt-1 text-amber-400 font-medium">Ningún archivo seleccionado</span>
-            <input type="file" id="html-file-input" accept=".html,.htm" onchange="handleHtmlFileUpload(event)" class="hidden">
-          </label>
+          
+          <p class="text-[11px] text-amber-300 font-semibold mb-2 leading-relaxed">
+            Pega el link directo (Netlify/GitHub). Haremos magia para extraer la foto, el título y la descripción por ti automáticamente.
+          </p>
 
           <form onsubmit="saveGuideFromOwnerForm(event)" class="space-y-3 pt-1">
             <input type="hidden" id="owner-edit-id" value="">
+            
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1 text-amber-400">Enlace de la Guía Web *</label>
+              <input type="url" id="owner-guide-url" required placeholder="https://tuguia.netlify.app/" onblur="fetchMetadataFromUrl(this.value)" class="w-full px-3.5 py-2.5 rounded-xl liquid-glass border-amber-400 text-xs focus:outline-none focus:border-amber-400">
+            </div>
+
             <div>
               <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Nombre del Lugar *</label>
               <input type="text" id="owner-place-title" required placeholder="Ej. Mirador de Cóndores" class="w-full px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
@@ -473,9 +468,9 @@
             </div>
 
             <div>
-              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Foto Vertical de Portada *</label>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Foto Vertical de Portada <span class="lowercase font-normal text-amber-300">(Opcional si se auto-rellenó)</span></label>
               <div class="flex gap-2">
-                <input type="text" id="owner-cover-url" required placeholder="https://... o sube foto al lado ->" class="flex-1 px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
+                <input type="text" id="owner-cover-url" placeholder="https://... o sube foto ->" class="flex-1 px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
                 <label class="px-3 py-2.5 rounded-xl liquid-glass text-xs font-semibold cursor-pointer hover:border-amber-400 shrink-0 flex items-center gap-1">
                   <i data-lucide="image" class="w-4 h-4 text-amber-400"></i>
                   <span>Foto</span>
@@ -492,7 +487,7 @@
             <div class="flex gap-2 pt-1">
               <button type="submit" class="flex-1 btn-crimson py-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5">
                 <i data-lucide="save" class="w-4 h-4"></i>
-                <span id="owner-submit-label">Guardar Guía en Catálogo</span>
+                <span id="owner-submit-label">Guardar Guía</span>
               </button>
               <button type="button" onclick="resetOwnerForm()" class="px-3 py-3 rounded-xl liquid-glass text-xs">Limpiar</button>
             </div>
@@ -547,8 +542,13 @@
               <i data-lucide="layers" class="w-5 h-5 text-amber-400"></i>
               <span>Tus Guías Publicadas</span>
             </h3>
-            <button onclick="resetAllMetricsToZero()" class="text-[11px] px-3 py-1 rounded-lg liquid-glass hover:border-red-400 text-red-300">Reiniciar contadores a 0</button>
+            <button onclick="resetAllMetricsToZero()" class="text-[11px] px-3 py-1 rounded-lg liquid-glass hover:border-red-400 text-red-300">Borrar todo y reiniciar a 0</button>
           </div>
+          
+          <div class="p-3 mb-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs">
+            <strong class="text-amber-400">Nota:</strong> Si ves guías de prueba y las quieres eliminar, presiona "Borrar" en cada una, o usa el botón de "Borrar todo" arriba. Al eliminarlas de aquí, se borrarán definitivamente de tu base de datos en la nube.
+          </div>
+
           <div id="owner-guides-list" class="space-y-3"></div>
         </div>
 
@@ -635,18 +635,18 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
               <button onclick="openInteractiveBookReader()" class="btn-crimson py-3.5 px-4 rounded-2xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2">
                 <i data-lucide="book-open" class="w-4 h-4 text-amber-300"></i>
-                <span>Abrir Guía Visual Aquí</span>
+                <span>Abrir Guía Aquí</span>
               </button>
-              <button onclick="downloadCurrentGuideHtml()" class="liquid-glass py-3.5 px-4 rounded-2xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 hover:border-amber-400">
-                <i data-lucide="download" class="w-4 h-4 text-sky-400"></i>
-                <span>Descargar Gratis</span>
+              <button onclick="openGuideInFullTab()" class="liquid-glass py-3.5 px-4 rounded-2xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 hover:border-amber-400">
+                <i data-lucide="maximize-2" class="w-4 h-4 text-sky-400"></i>
+                <span>Ver en Pantalla Completa</span>
               </button>
             </div>
 
             <div class="rounded-2xl p-3.5 text-xs leading-relaxed border border-amber-500/30 bg-amber-500/10 flex items-start gap-2.5 text-left">
               <i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
               <p style="color: var(--text-secondary);">
-                <strong class="text-amber-300">Dato antes de salir:</strong> Los costos de pasajes o entradas pueden variar. Verifica la información antes de iniciar tu ruta.
+                <strong class="text-amber-300">Para iPhone:</strong> Si la guía no carga bien aquí, presiona "Ver en Pantalla Completa". Para guardarla como App, toca el ícono "Compartir" de Safari y luego "Agregar a Inicio".
               </p>
             </div>
 
@@ -675,18 +675,14 @@
           <div class="flex flex-wrap items-center justify-between gap-2 text-xs px-1">
             <span class="font-semibold text-amber-400 flex items-center gap-1.5">
               <i data-lucide="compass" class="w-4 h-4"></i>
-              <span>Guía visual interactiva</span>
+              <span>Cargando enlace...</span>
             </span>
             <div class="flex items-center gap-3">
-              <button onclick="openGuideInFullTab()" class="text-sky-400 font-semibold hover:underline flex items-center gap-1">
-                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
-                <span>Pantalla completa</span>
-              </button>
               <button onclick="closeInteractiveBookReader()" class="underline" style="color: var(--text-secondary);">Cerrar lector</button>
             </div>
           </div>
-          <div class="w-full h-[65vh] sm:h-[520px] rounded-2xl overflow-hidden border border-amber-400/40 bg-black shadow-2xl">
-            <iframe id="guide-html-iframe" class="w-full h-full border-0" sandbox="allow-scripts allow-same-origin allow-popups" srcdoc=""></iframe>
+          <div class="w-full h-[75vh] sm:h-[600px] rounded-2xl overflow-hidden border border-amber-400/40 bg-black shadow-2xl">
+            <iframe id="guide-html-iframe" class="w-full h-full border-0" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
           </div>
         </div>
 
@@ -790,128 +786,7 @@
       measurementId: "G-G3PH2PWRBG"
     };
 
-    const INITIAL_GUIDES = [
-      {
-        id: "g-1793054913489",
-        title: "Maras",
-        location: "Maras, Urubamba, Cusco",
-        publishDate: "Diciembre 2024",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/d4cDF4vC/HID-9141.jpg",
-        shortDesc: "Galería a Cielo Abierto",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Maras</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Maras</h1><p>Guía visual por Jean Pixels.</p></body></html>"
-      },
-      {
-        id: "g-1793054615556",
-        title: "Laguna Turquesa de Maranganí",
-        location: "Occobamba, Maranganí, Canchis, Cusco.",
-        publishDate: "Setiembre 2026",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/8g26C2YC/DJI-0122-11zon.jpg",
-        shortDesc: "Espejo de agua glaciar sobre la cordillera de Canchis.",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Laguna Maranganí</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Laguna Turquesa</h1><p>Guía por Jean Pixels.</p></body></html>"
-      },
-      {
-        id: "g-1793054529633",
-        title: "El Muelle Solitario",
-        location: "Anta, Cusco",
-        publishDate: "Julio 2026",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/9kbxRQyQ/HID-8293.jpg",
-        shortDesc: "Un refugio de silencio en la laguna de Huaypo.",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Muelle Solitario</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>El Muelle Solitario</h1><p>Guía por Jean Pixels.</p></body></html>"
-      },
-      {
-        id: "g-1793054376806",
-        title: "3 Puentes de Checacupe",
-        location: "Checacupe, Canchis, Cusco.",
-        publishDate: "Octubre 2025",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/W4jR6P6F/Gemini-Generated-Image-p37q7jp37q7jp37q.jpg",
-        shortDesc: "Inca, Colonial y Republicano en una sola vista.",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Checacupe</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>3 Puentes de Checacupe</h1><p>Guía por Jean Pixels.</p></body></html>"
-      },
-      {
-        id: "g-1793054314241",
-        title: "Vortice de Hierro",
-        location: "La Raya, Cusco - Puno.",
-        publishDate: "Mayo 2024",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/jvBFppjB/compress152839-1.jpg",
-        shortDesc: "Frontera de metal en Abra La Raya.",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Vórtice de Hierro</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Vórtice de Hierro</h1><p>Guía por Jean Pixels.</p></body></html>"
-      },
-      {
-        id: "g-1793054234703",
-        title: "Cascada Huacamani",
-        location: "Livitaca, Chumbivilcas, Cusco.",
-        publishDate: "Noviembre 2023",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/21nJdMNG/HID-4644.jpg",
-        shortDesc: "El grito de la montaña en Chumbivilcas.",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Huacamani</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Cascada Huacamani</h1><p>Guía por Jean Pixels.</p></body></html>"
-      },
-      {
-        id: "g-1793054164108",
-        title: "Quellhuacocha, La Laguna de las Dos Caras",
-        location: "Quisini, Maranganí, Canchis, Cusco.",
-        publishDate: "Noviembre 2025",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/9kRgP1Lx/HID-7092.jpg",
-        shortDesc: "Archipiélago turquesa en altura.",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Quellhuacocha</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Quellhuacocha</h1><p>Guía por Jean Pixels.</p></body></html>"
-      },
-      {
-        id: "g-1793054096737",
-        title: "Laguna de Quillca",
-        location: "Occobamba, Maranganí, Canchis, Cusco.",
-        publishDate: "Febrero 2026",
-        videoTag: "Guía Visual",
-        cover: "https://i.ibb.co/JRCb4RGS/HID-0317.jpg",
-        shortDesc: "Joyita oculta de Occobamba.",
-        likes: 0,
-        useful: 0,
-        views: 0,
-        downloads: 0,
-        comments: [],
-        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Quillca</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Laguna de Quillca</h1><p>Guía por Jean Pixels.</p></body></html>"
-      }
-    ];
+    const INITIAL_GUIDES = [];
 
     const DEFAULT_CONFIG = {
       ownerPin: "464615",
@@ -925,7 +800,7 @@
       sponsors: [],
       customTexts: {
         slogan: "¡Aventura y Gloria!",
-        heroSub: "Toca cualquier portada para revisar la guía en tu pantalla o descargarla gratis antes de salir a la ruta.",
+        heroSub: "Toca cualquier portada para revisar la guía en tu pantalla o abrirla a tamaño completo.",
         yapeTitle: "¿Te sirvió alguna guía para armar tu ruta?",
         yapeDesc: "Estas guías visuales son gratis para que te animes a salir por tu cuenta. Si el contenido te ahorró tiempo, puedes invitarme un café o apoyar mi trabajo por Yape."
       }
@@ -937,7 +812,6 @@
     let siteConfig = {};
     let userReacts = {};
     let activeGuideId = null;
-    let pendingUploadedHtml = "";
     let selectedDonationLabel = "S/ 5";
     let isOwnerUnlocked = false;
     let isOwnerViewOpen = false;
@@ -959,7 +833,7 @@
     });
 
     function initAutoTheme() {
-      const savedTheme = localStorage.getItem('rutas_theme_v6');
+      const savedTheme = localStorage.getItem('rutas_theme_v7');
       if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
@@ -975,7 +849,7 @@
       const current = document.documentElement.getAttribute('data-theme');
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('rutas_theme_v6', next);
+      localStorage.setItem('rutas_theme_v7', next);
       updateThemeIcon(next);
     }
 
@@ -999,7 +873,7 @@
     function initFirebaseAndLoad() {
       guides = JSON.parse(JSON.stringify(INITIAL_GUIDES));
       siteConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-      userReacts = JSON.parse(localStorage.getItem('rutas_reacts_v6') || '{}');
+      userReacts = JSON.parse(localStorage.getItem('rutas_reacts_v7') || '{}');
 
       try {
         if (typeof firebase !== 'undefined' && EMBEDDED_FIREBASE_CONFIG && EMBEDDED_FIREBASE_CONFIG.apiKey) {
@@ -1009,7 +883,6 @@
           db = firebase.firestore();
           isFirebaseConnected = true;
           
-          // Sincronizar en tiempo real desde Firestore
           db.collection('rutas_visuales').doc('guides_catalog').onSnapshot((doc) => {
             if (doc.exists && doc.data().guides) {
               guides = doc.data().guides;
@@ -1047,8 +920,8 @@
     }
 
     function loadFromLocalFallback() {
-      const savedGuides = localStorage.getItem('rutas_guides_v6');
-      const savedConfig = localStorage.getItem('rutas_config_v6');
+      const savedGuides = localStorage.getItem('rutas_guides_v7');
+      const savedConfig = localStorage.getItem('rutas_config_v7');
       if (savedGuides) guides = JSON.parse(savedGuides);
       if (savedConfig) siteConfig = { ...DEFAULT_CONFIG, ...JSON.parse(savedConfig) };
       updateCloudStatusBadges(false);
@@ -1059,7 +932,7 @@
         db.collection('rutas_visuales').doc('guides_catalog').set({ guides })
           .catch(err => console.error("Error guardando guías:", err));
       } else {
-        localStorage.setItem('rutas_guides_v6', JSON.stringify(guides));
+        localStorage.setItem('rutas_guides_v7', JSON.stringify(guides));
       }
     }
 
@@ -1068,14 +941,14 @@
         db.collection('rutas_visuales').doc('site_config').set({ config: siteConfig })
           .catch(err => console.error("Error guardando config:", err));
       } else {
-        localStorage.setItem('rutas_config_v6', JSON.stringify(siteConfig));
+        localStorage.setItem('rutas_config_v7', JSON.stringify(siteConfig));
       }
     }
 
     function saveData() {
       saveGuidesToFirebase();
       saveConfigToFirebase();
-      localStorage.setItem('rutas_reacts_v6', JSON.stringify(userReacts));
+      localStorage.setItem('rutas_reacts_v7', JSON.stringify(userReacts));
     }
 
     function testFirebaseConnectionReal() {
@@ -1189,11 +1062,14 @@
         const hasLikes = (g.likes || 0) > 0;
         const userLiked = userReacts[g.id]?.like;
         const heartFillClass = (hasLikes || userLiked) ? 'text-red-500 fill-red-500' : 'text-white/70';
+        
+        // Manejador seguro para evitar que rompa si no hay cover
+        const coverSrc = g.cover || 'https://placehold.co/600x900/1a080c/fbbf24?text=Guia+Visual';
 
         return `
         <article onclick="openGuideModal('${g.id}')" style="animation-delay: ${idx * 60}ms" class="poster-card cursor-pointer group flex flex-col">
           <div class="poster-box">
-            <img src="${g.cover}" alt="${g.title}" loading="lazy" class="poster-img" onerror="this.src='https://placehold.co/600x900/1a080c/fbbf24?text=Guia+Visual'" />
+            <img src="${coverSrc}" alt="${g.title}" loading="lazy" class="poster-img" onerror="this.src='https://placehold.co/600x900/1a080c/fbbf24?text=Guia+Visual'" />
             <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between">
               <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-black/70 text-amber-300 backdrop-blur-md border border-amber-400/25 truncate">
                 ${g.location}
@@ -1253,8 +1129,9 @@
       g.views = (g.views || 0) + 1;
       saveData();
       renderOwnerDashboard();
-
-      document.getElementById('modal-poster-img').src = g.cover;
+      
+      const coverSrc = g.cover || 'https://placehold.co/600x900/1a080c/fbbf24?text=Guia+Visual';
+      document.getElementById('modal-poster-img').src = coverSrc;
       document.getElementById('modal-location').innerHTML = `<i data-lucide="map-pin" class="w-3.5 h-3.5"></i><span>${g.location}</span>`;
       document.getElementById('modal-date').textContent = g.publishDate ? `Publicado: ${g.publishDate}` : 'Fecha referencial';
       document.getElementById('modal-title').textContent = g.title;
@@ -1286,39 +1163,27 @@
       const box = document.getElementById('interactive-reader-box');
       const iframe = document.getElementById('guide-html-iframe');
       box.classList.remove('hidden');
-      iframe.srcdoc = g.htmlContent || '<html><body><h1>' + g.title + '</h1></body></html>';
+      
+      iframe.removeAttribute('srcdoc');
+      iframe.src = g.guideUrl || 'about:blank';
+      
       setTimeout(() => { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
     }
 
     function openGuideInFullTab() {
       const g = guides.find(item => item.id === activeGuideId);
       if (!g) return;
-      const htmlString = g.htmlContent || '<html><body><h1>' + g.title + '</h1></body></html>';
-      const blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' });
-      window.open(URL.createObjectURL(blob), '_blank');
+      
+      g.downloads = (g.downloads || 0) + 1;
+      saveData();
+      renderOwnerDashboard();
+      
+      window.open(g.guideUrl || '#', '_blank');
+      showToast("Toca 'Compartir' y luego 'Agregar a Inicio' para guardarla como App.");
     }
 
     function closeInteractiveBookReader() {
       document.getElementById('interactive-reader-box').classList.add('hidden');
-    }
-
-    function downloadCurrentGuideHtml() {
-      const g = guides.find(item => item.id === activeGuideId);
-      if (!g) return;
-
-      g.downloads = (g.downloads || 0) + 1;
-      saveData();
-      renderOwnerDashboard();
-
-      const htmlString = g.htmlContent || '<html><body><h1>' + g.title + '</h1></body></html>';
-      const blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `Guia-Visual-${g.title.replace(/\s+/g, '-')}.html`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      showToast(`Descargando "${g.title}" gratis...`);
     }
 
     function toggleReaction(type) {
@@ -1515,27 +1380,36 @@
       document.getElementById('owner-view').classList.add('hidden');
     }
 
-    function handleHtmlFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+    // EXTRAE METADATOS AUTOMÁTICAMENTE USANDO ALLORIGINS (Proxy Gratis)
+    async function fetchMetadataFromUrl(url) {
+      if (!url) return;
+      showToast('Analizando enlace para extraer foto y título...');
+      
+      try {
+        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+        if (response.ok) {
+          const data = await response.json();
+          const html = data.contents;
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
 
-      document.getElementById('uploaded-filename').textContent = `Archivo: ${file.name}`;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const rawHtml = e.target.result;
-        pendingUploadedHtml = rawHtml;
+          const ogImage = doc.querySelector('meta[property="og:image"]')?.content;
+          let ogTitle = doc.querySelector('meta[property="og:title"]')?.content || doc.title;
+          const ogDesc = doc.querySelector('meta[property="og:description"]')?.content;
+          
+          if (ogImage) document.getElementById('owner-cover-url').value = ogImage;
+          if (ogTitle) document.getElementById('owner-place-title').value = ogTitle.trim();
+          if (ogDesc) document.getElementById('owner-short-desc').value = ogDesc;
 
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(rawHtml, 'text/html');
-        const extractedTitle = doc.querySelector('h1')?.textContent?.trim() || doc.querySelector('title')?.textContent?.trim() || file.name.replace(/\.html?$/i, '');
-        const ogImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
-        const firstImg = doc.querySelector('img')?.getAttribute('src');
-
-        document.getElementById('owner-place-title').value = extractedTitle;
-        if (ogImage || firstImg) document.getElementById('owner-cover-url').value = ogImage || firstImg;
-        showToast('¡HTML cargado con éxito!');
-      };
-      reader.readAsText(file);
+          if (ogImage) showToast('¡Foto y datos extraídos con éxito!');
+          else showToast('Datos leídos, pero no se encontró foto automática.');
+        } else {
+           showToast('No se pudo extraer automáticamente (Añádelos a mano).');
+        }
+      } catch (e) {
+        console.error(e);
+        showToast('No se pudo extraer automáticamente (Añádelos a mano).');
+      }
     }
 
     function compressImageToDataUrl(file, maxWidth, callback) {
@@ -1577,6 +1451,7 @@
     function saveGuideFromOwnerForm(e) {
       e.preventDefault();
       const editId = document.getElementById('owner-edit-id').value;
+      const guideUrl = document.getElementById('owner-guide-url').value.trim();
       const title = document.getElementById('owner-place-title').value.trim();
       const location = document.getElementById('owner-location').value.trim() || 'Perú';
       const publishDate = document.getElementById('owner-publish-date').value.trim() || 'Noviembre 2026';
@@ -1593,7 +1468,7 @@
           guides[idx].videoTag = videoTag;
           guides[idx].cover = cover;
           guides[idx].shortDesc = shortDesc;
-          if (pendingUploadedHtml) guides[idx].htmlContent = pendingUploadedHtml;
+          guides[idx].guideUrl = guideUrl;
         }
         showToast('Guía actualizada en la nube');
       } else {
@@ -1605,12 +1480,12 @@
           videoTag,
           cover,
           shortDesc,
+          guideUrl,
           likes: 0,
           useful: 0,
           views: 0,
           downloads: 0,
-          comments: [],
-          htmlContent: pendingUploadedHtml || '<html><body><h1>' + title + '</h1></body></html>'
+          comments: []
         };
         guides.unshift(newGuide);
         showToast('¡Guía agregada a Firebase!');
@@ -1626,11 +1501,12 @@
       const g = guides.find(item => item.id === id);
       if (!g) return;
       document.getElementById('owner-edit-id').value = g.id;
+      document.getElementById('owner-guide-url').value = g.guideUrl || '';
       document.getElementById('owner-place-title').value = g.title;
       document.getElementById('owner-location').value = g.location;
       document.getElementById('owner-publish-date').value = g.publishDate || '';
       document.getElementById('owner-video-tag').value = g.videoTag || '';
-      document.getElementById('owner-cover-url').value = g.cover;
+      document.getElementById('owner-cover-url').value = g.cover || '';
       document.getElementById('owner-short-desc').value = g.shortDesc || '';
       document.getElementById('owner-submit-label').textContent = 'Guardar Cambios';
       window.scrollTo({ top: 200, behavior: 'smooth' });
@@ -1645,26 +1521,25 @@
     }
 
     function resetAllMetricsToZero() {
-      guides.forEach(g => { g.likes = 0; g.useful = 0; g.views = 0; g.downloads = 0; });
+      guides = []; // Borramos todas las guías localmente
       siteConfig.yapeClicks = 0;
       userReacts = {};
-      saveData();
+      saveData(); 
       renderPosters();
       renderOwnerDashboard();
-      showToast('Contadores reiniciados');
+      showToast('Todo borrado. Catálogo en 0.');
     }
 
     function resetOwnerForm() {
       document.getElementById('owner-edit-id').value = '';
+      document.getElementById('owner-guide-url').value = '';
       document.getElementById('owner-place-title').value = '';
       document.getElementById('owner-location').value = '';
       document.getElementById('owner-publish-date').value = '';
       document.getElementById('owner-video-tag').value = '';
       document.getElementById('owner-cover-url').value = '';
       document.getElementById('owner-short-desc').value = '';
-      document.getElementById('uploaded-filename').textContent = 'Ningún archivo seleccionado';
-      document.getElementById('owner-submit-label').textContent = 'Guardar Guía en Catálogo';
-      pendingUploadedHtml = '';
+      document.getElementById('owner-submit-label').textContent = 'Guardar Guía';
     }
 
     function saveYapeAndPinConfig(e) {
@@ -1727,26 +1602,33 @@
       document.getElementById('metric-yape').textContent = siteConfig.yapeClicks || 0;
 
       const listEl = document.getElementById('owner-guides-list');
-      listEl.innerHTML = guides.map(g => `
-        <div class="liquid-glass p-3.5 rounded-2xl flex items-center justify-between gap-3">
-          <div class="flex items-center gap-3 min-w-0">
-            <img src="${g.cover}" alt="${g.title}" class="w-11 h-16 object-cover rounded-lg shrink-0 border border-white/15" />
-            <div class="min-w-0">
-              <h4 class="font-hero font-bold text-sm truncate">${g.title}</h4>
-              <p class="text-[11px] truncate" style="color: var(--text-secondary);">${g.location}</p>
-              <div class="flex items-center gap-3 mt-1 text-[11px] text-amber-300">
-                <span>👁️ ${g.views || 0}</span>
-                <span>⬇️ ${g.downloads || 0}</span>
-                <span>❤️ ${g.likes || 0}</span>
+      
+      if (guides.length === 0) {
+          listEl.innerHTML = `<p class="text-xs italic" style="color: var(--text-secondary);">No hay guías publicadas. ¡Empieza agregando un Link!</p>`;
+      } else {
+          listEl.innerHTML = guides.map(g => {
+            const coverSrc = g.cover || 'https://placehold.co/600x900/1a080c/fbbf24?text=Guia+Visual';
+            return `
+            <div class="liquid-glass p-3.5 rounded-2xl flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <img src="${coverSrc}" alt="${g.title}" class="w-11 h-16 object-cover rounded-lg shrink-0 border border-white/15" onerror="this.src='https://placehold.co/600x900/1a080c/fbbf24?text=Guia+Visual'"/>
+                <div class="min-w-0">
+                  <h4 class="font-hero font-bold text-sm truncate">${g.title}</h4>
+                  <p class="text-[11px] truncate" style="color: var(--text-secondary);">${g.location}</p>
+                  <div class="flex items-center gap-3 mt-1 text-[11px] text-amber-300">
+                    <span>👁️ ${g.views || 0}</span>
+                    <span>⬇️ ${g.downloads || 0}</span>
+                    <span>❤️ ${g.likes || 0}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="editGuideInOwnerPanel('${g.id}')" class="px-2.5 py-1.5 rounded-lg liquid-glass text-xs hover:border-amber-400">Editar</button>
+                <button onclick="deleteGuideFromOwnerPanel('${g.id}')" class="px-2.5 py-1.5 rounded-lg liquid-glass text-xs text-red-400 hover:border-red-500">Borrar</button>
               </div>
             </div>
-          </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <button onclick="editGuideInOwnerPanel('${g.id}')" class="px-2.5 py-1.5 rounded-lg liquid-glass text-xs hover:border-amber-400">Editar</button>
-            <button onclick="deleteGuideFromOwnerPanel('${g.id}')" class="px-2.5 py-1.5 rounded-lg liquid-glass text-xs text-red-400 hover:border-red-500">Borrar</button>
-          </div>
-        </div>
-      `).join('');
+          `}).join('');
+      }
 
       const adsListEl = document.getElementById('owner-ads-list');
       if (adsListEl) {
