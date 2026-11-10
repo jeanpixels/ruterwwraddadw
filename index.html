@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rutas Visuales — por Jean Pixels</title>
+  
+  <!-- Favicon vectorial con silueta de persona y libro -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v16'/%3E%3Cpath d='M16 12l2 2 4-4'/%3E%3Cpath d='M22 6V5a2 2 0 00-2-2h-4a5 5 0 00-4 2 5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 002 2h4a5 5 0 014 2 5 5 0 014-2h4a2 2 0 002-2v-1.344'/%3E%3Ccircle cx='9' cy='7' r='3'/%3E%3Cpath d='M4 18c0-2 2.5-3 5-3s5 1 5 3'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,600;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Firebase SDK Compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            brand: ['Unbounded', 'sans-serif'],
+            hero: ['Playfair Display', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root[data-theme="dark"] {
+      --bg-base: #090507;
+      --bg-elevated: #13090d;
+      --text-primary: #fff8f6;
+      --text-secondary: #c4afb3;
+      --glass-surface: rgba(255, 255, 255, 0.045);
+      --glass-surface-hover: rgba(255, 255, 255, 0.08);
+      --glass-modal: rgba(15, 8, 12, 0.93);
+      --glass-border: rgba(255, 255, 255, 0.11);
+      --glass-border-highlight: rgba(251, 191, 36, 0.35);
+      --crimson-core: #e50914;
+      --gold-accent: #fbbf24;
+      --teal-accent: #38bdf8;
+      --orb-1: rgba(229, 9, 20, 0.22);
+      --orb-2: rgba(245, 158, 11, 0.12);
+      --orb-3: rgba(56, 189, 248, 0.10);
+      --poster-shadow: 0 22px 45px -12px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(229, 9, 20, 0.14), inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+    }
+
+    :root[data-theme="light"] {
+      --bg-base: #f1f5f9;
+      --bg-elevated: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --glass-surface: rgba(255, 255, 255, 0.75);
+      --glass-surface-hover: rgba(255, 255, 255, 0.95);
+      --glass-modal: rgba(248, 250, 252, 0.96);
+      --glass-border: rgba(15, 23, 42, 0.1);
+      --glass-border-highlight: rgba(217, 119, 6, 0.38);
+      --crimson-core: #d90712;
+      --gold-accent: #d97706;
+      --teal-accent: #0284c7;
+      --orb-1: rgba(229, 9, 20, 0.08);
+      --orb-2: rgba(251, 191, 36, 0.10);
+      --orb-3: rgba(14, 165, 233, 0.08);
+      --poster-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+    }
+
+    * { box-sizing: border-box; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-base); color: var(--text-primary); font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.45s ease, color 0.45s ease; overflow-x: hidden; min-height: 100vh; }
+
+    .ambient-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+    .ambient-orb { position: absolute; border-radius: 50%; filter: blur(95px); animation: floatAmbient 22s infinite alternate ease-in-out; }
+    .orb-a { width: 600px; height: 600px; background: radial-gradient(circle, var(--orb-1), transparent 70%); top: -180px; left: -120px; }
+    .orb-b { width: 580px; height: 580px; background: radial-gradient(circle, var(--orb-2), transparent 70%); bottom: -200px; right: -120px; animation-delay: -7s; }
+    .orb-c { width: 460px; height: 460px; background: radial-gradient(circle, var(--orb-3), transparent 70%); top: 36%; left: 35%; animation-delay: -14s; }
+
+    @keyframes floatAmbient {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -25px) scale(1.06); }
+      100% { transform: translate(-20px, 25px) scale(0.95); }
+    }
+
+    .liquid-glass { background: var(--glass-surface); backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%); border: 1px solid var(--glass-border); box-shadow: var(--poster-shadow); transition: all 0.38s cubic-bezier(0.16, 1, 0.3, 1); }
+    .liquid-modal { background: var(--glass-modal); backdrop-filter: blur(30px) saturate(190%); -webkit-backdrop-filter: blur(30px) saturate(190%); border: 1px solid var(--glass-border); box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85); }
+
+    @keyframes modalSpring {
+      0% { opacity: 0; transform: translateY(22px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-modal-in { animation: modalSpring 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    @keyframes cardEntrance { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .poster-card { animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+    .poster-box { position: relative; aspect-ratio: 2 / 3; border-radius: 1.25rem; overflow: hidden; background: #12070a; border: 1px solid var(--glass-border); box-shadow: var(--poster-shadow); transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.45s ease; }
+    .poster-box::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 9px; background: linear-gradient(to right, rgba(255,255,255,0.28), rgba(255,255,255,0.03) 60%, rgba(0,0,0,0.4)); z-index: 15; pointer-events: none; }
+    .poster-box::after { content: ""; position: absolute; inset: 0; background: linear-gradient(125deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 45%, rgba(251,191,36,0.14) 100%); opacity: 0; transition: opacity 0.4s ease; z-index: 12; pointer-events: none; }
+    .poster-card:hover .poster-box { transform: translateY(-7px) scale(1.015); border-color: rgba(251, 191, 36, 0.65); box-shadow: 0 28px 55px -12px rgba(229, 9, 20, 0.32), 0 0 20px -4px rgba(251, 191, 36, 0.25); }
+    .poster-card:hover .poster-box::after { opacity: 1; }
+    .poster-img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .poster-card:hover .poster-img { transform: scale(1.06); }
+
+    .btn-crimson { background: linear-gradient(135deg, #f41826 0%, #c10612 60%, #85040d 100%); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.22); box-shadow: 0 10px 26px -6px rgba(229, 9, 20, 0.5); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .btn-crimson:hover { transform: translateY(-2px); box-shadow: 0 14px 32px -5px rgba(229, 9, 20, 0.68); filter: brightness(1.07); }
+
+    .btn-yape-smart { background: linear-gradient(135deg, rgba(116, 35, 132, 0.92) 0%, rgba(74, 18, 89, 0.96) 100%); color: #ffffff; border: 1px solid rgba(16, 217, 196, 0.45); box-shadow: 0 10px 26px -6px rgba(116, 35, 132, 0.5); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .btn-yape-smart:hover { transform: translateY(-2px); border-color: rgba(16, 217, 196, 0.85); box-shadow: 0 14px 32px -5px rgba(116, 35, 132, 0.7), 0 0 15px -3px rgba(16, 217, 196, 0.35); }
+
+    .btn-community { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #ffffff; border: 1px solid rgba(110, 231, 183, 0.35); box-shadow: 0 10px 25px -6px rgba(5, 150, 105, 0.45); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .btn-community:hover { transform: translateY(-2px); filter: brightness(1.08); }
+
+    .text-gold-highlight { background: linear-gradient(135deg, #fde047 0%, #fbbf24 50%, #f59e0b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    :root[data-theme="light"] .text-gold-highlight { background: linear-gradient(135deg, #d97706 0%, #b45309 55%, #dc2626 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .search-spotlight { background: var(--glass-surface); backdrop-filter: blur(26px); border: 1.5px solid rgba(56, 189, 248, 0.35); box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.18); transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    .search-spotlight:focus-within { border-color: #38bdf8; box-shadow: 0 18px 45px -8px rgba(56, 189, 248, 0.28), 0 0 0 3px rgba(56, 189, 248, 0.15); transform: translateY(-1px); }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-400 selection:text-black">
+
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-orb orb-a"></div>
+    <div class="ambient-orb orb-b"></div>
+    <div class="ambient-orb orb-c"></div>
+  </div>
+
+  <div class="liquid-glass border-t-0 border-x-0 sticky top-0 z-40 px-3 sm:px-4 py-2 text-[11px] sm:text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center sm:justify-between gap-2 text-center sm:text-left">
+      <p class="flex items-center justify-center sm:justify-start gap-2" style="color: var(--text-secondary);">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+        <span><strong style="color: var(--text-primary);">Nota:</strong> No soy guía oficial de turismo; armo estas guías según mi experiencia para que vayas por tu cuenta. ¿Consultas o ayuda personalizada? <a href="#contacto" class="underline font-semibold text-amber-400 hover:text-amber-300">Escríbeme aquí</a>.</span>
+      </p>
+      <div id="owner-active-pill" class="items-center gap-2 hidden">
+        <button onclick="toggleOwnerView()" class="px-3 py-1 rounded-full text-[11px] font-semibold btn-crimson flex items-center gap-1.5">
+          <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+          <span id="owner-mode-label">Ir al Panel de Dueño</span>
+        </button>
+        <button onclick="lockOwnerMode()" class="px-2.5 py-1 rounded-full text-[11px] liquid-glass hover:border-amber-400">Salir</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-2">
+    <nav class="liquid-glass rounded-2xl px-3.5 sm:px-6 py-3 flex items-center justify-between gap-2">
+      <a href="#" onclick="showPublicView(); return false;" class="flex items-center gap-2.5 sm:gap-3 group min-w-0">
+        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl btn-crimson flex items-center justify-center shadow-lg shrink-0 group-hover:scale-105 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-300 drop-shadow"><path d="M12 5v16"/><path d="M16 12l2 2 4-4"/><path d="M22 6V5a2 2 0 00-2-2h-4a5 5 0 00-4 2 5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 002 2h4a5 5 0 014 2 5 5 0 014-2h4a2 2 0 002-2v-1.344"/><circle cx="9" cy="7" r="3"/><path d="M4 18c0-2 2.5-3 5-3s5 1 5 3"/></svg>
+        </div>
+        <div class="min-w-0">
+          <span class="font-brand font-extrabold text-sm sm:text-lg tracking-tight block leading-none truncate">RUTAS VISUALES</span>
+          <span class="text-[11px] font-medium block mt-0.5 truncate text-amber-400/90">por Jean Pixels</span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <a href="#apoyar" onclick="showPublicView()" class="btn-yape-smart px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-[#10d9c4]"></span>
+          <span>Yapear</span>
+          <span class="hidden md:inline">/ Apoyar</span>
+        </a>
+
+        <a href="#comunidad" onclick="showPublicView()" class="liquid-glass px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold hover:border-emerald-400 transition hidden md:inline-flex items-center gap-1.5">
+          <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
+          <span>Comunidad</span>
+        </a>
+
+        <a href="#contacto" onclick="showPublicView()" class="liquid-glass px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold hover:border-sky-400 transition hidden sm:inline-flex items-center gap-1.5">
+          <i data-lucide="message-circle" class="w-4 h-4 text-sky-400"></i>
+          <span>Contacto</span>
+        </a>
+
+        <button onclick="toggleTheme()" class="liquid-glass w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center hover:border-amber-400 transition" title="Cambiar tema">
+          <i data-lucide="sun" id="theme-icon" class="w-4 h-4 text-amber-400"></i>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="public-view" class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-12 sm:space-y-16">
+
+    <section class="text-center max-w-3xl mx-auto space-y-4 sm:space-y-5 pt-1 sm:pt-3">
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold liquid-glass">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-sky-400"></i>
+          <span>Rutas para ir por cuenta propia</span>
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+          <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="ui-slogan-badge">¡Aventura y Gloria!</span>
+        </span>
+      </div>
+
+      <h1 class="font-hero text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12]">
+        Elige tu próximo destino y <span class="italic text-gold-highlight">abre la guía visual</span>.
+      </h1>
+
+      <p id="ui-hero-subtitle" class="text-sm sm:text-base max-w-xl mx-auto" style="color: var(--text-secondary);">Toca cualquier portada para revisar la guía en tu pantalla o descargarla gratis antes de salir a la ruta.</p>
+
+      <div class="search-spotlight rounded-2xl p-1.5 sm:p-2.5 flex items-center gap-2 max-w-2xl mx-auto">
+        <div class="pl-3 sm:pl-4 flex items-center pointer-events-none">
+          <i data-lucide="search" class="w-5 h-5 sm:w-6 sm:h-6 text-sky-400"></i>
+        </div>
+        <input type="text" id="search-input" oninput="renderPosters()" placeholder="Buscar guía por nombre del lugar..." class="w-full bg-transparent py-2.5 sm:py-3 px-1.5 text-sm sm:text-base font-medium focus:outline-none" style="color: var(--text-primary);">
+        <button onclick="clearSearch()" id="clear-search-btn" class="hidden px-3 py-1.5 rounded-xl text-xs font-semibold liquid-glass hover:border-sky-400 shrink-0">Ver todas</button>
+      </div>
+    </section>
+
+    <section id="catalogo" class="space-y-4 sm:space-y-6">
+      <div class="flex items-center justify-between px-1">
+        <h2 class="font-brand text-base sm:text-xl font-extrabold tracking-tight flex items-center gap-2">
+          <i data-lucide="book-marked" class="w-5 h-5 text-amber-400"></i>
+          <span>GUÍAS DISPONIBLES</span>
+        </h2>
+        <span class="text-xs font-medium" style="color: var(--text-secondary);"><strong id="guides-counter" class="text-amber-400">0</strong> rutas</span>
+      </div>
+
+      <div id="posters-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-7"></div>
+
+      <div id="empty-posters" class="liquid-glass rounded-3xl p-8 sm:p-10 text-center max-w-md mx-auto space-y-3 hidden">
+        <i data-lucide="map-pinned" class="w-8 h-8 text-sky-400 mx-auto"></i>
+        <p class="font-brand text-base font-bold">No encontré esa ruta todavía</p>
+        <p class="text-xs" style="color: var(--text-secondary);">Prueba buscando con el nombre del lugar.</p>
+        <button onclick="clearSearch()" class="btn-crimson px-4 py-2 rounded-xl text-xs font-semibold">Mostrar todas las guías</button>
+      </div>
+    </section>
+
+    <section id="sponsors-section" class="hidden space-y-3">
+      <div class="flex items-center justify-between px-1">
+        <span class="text-[11px] font-bold uppercase tracking-widest flex items-center gap-1.5" style="color: var(--text-secondary);">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Datos y paradas recomendadas</span>
+        </span>
+        <a href="#contacto" class="text-[11px] underline hover:text-amber-400" style="color: var(--text-secondary);">¿Quieres anunciar aquí?</a>
+      </div>
+      <div id="sponsors-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+    </section>
+
+    <section id="apoyar" class="liquid-glass rounded-3xl p-5 sm:p-9 lg:p-11 relative overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10 items-center">
+        <div class="lg:col-span-7 space-y-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold liquid-glass text-sky-300">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Para ir por cuenta propia</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+              <span>🐧 ¡Aventura y Gloria!</span>
+            </span>
+          </div>
+
+          <h2 id="ui-yape-title" class="font-hero text-2xl sm:text-4xl font-bold leading-snug">¿Te sirvió alguna guía para armar tu ruta?</h2>
+          <p id="ui-yape-desc" class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">Estas guías visuales son gratis para que te animes a salir por tu cuenta. Si el contenido te ahorró tiempo, puedes invitarme un café o apoyar mi trabajo por Yape.</p>
+        </div>
+
+        <div class="lg:col-span-5 liquid-glass rounded-2xl p-5 sm:p-6 space-y-4 border border-[#10d9c4]/35">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-[#742384] text-white font-brand font-bold text-xs flex items-center justify-center border border-[#10d9c4]/50">S/</span>
+              <span class="font-brand text-xs sm:text-sm font-bold">APOYAR POR YAPE</span>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#10d9c4]/15 text-[#10d9c4] border border-[#10d9c4]/30">Directo a Jean Pixels</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="selectDonation(5, 'S/ 5')" id="don-btn-5" class="don-option liquid-glass py-2.5 px-3 rounded-xl text-left border-2 border-[#10d9c4] transition">
+              <span class="font-brand font-extrabold text-sm sm:text-base block">S/ 5</span>
+              <span class="text-[11px] block" style="color: var(--text-secondary);">Un café</span>
+            </button>
+            <button onclick="selectDonation(15, 'S/ 15')" id="don-btn-15" class="don-option liquid-glass py-2.5 px-3 rounded-xl text-left border-2 border-transparent transition">
+              <span class="font-brand font-extrabold text-sm sm:text-base block">S/ 15</span>
+              <span class="text-[11px] block" style="color: var(--text-secondary);">Combustible</span>
+            </button>
+            <button onclick="selectDonation(30, 'S/ 30')" id="don-btn-30" class="don-option liquid-glass py-2.5 px-3 rounded-xl text-left border-2 border-transparent transition">
+              <span class="font-brand font-extrabold text-sm sm:text-base block">S/ 30</span>
+              <span class="text-[11px] block" style="color: var(--text-secondary);">Más rutas</span>
+            </button>
+            <button onclick="selectDonation('libre', 'Monto Libre')" id="don-btn-libre" class="don-option liquid-glass py-2.5 px-3 rounded-xl text-left border-2 border-transparent transition">
+              <span class="font-brand font-extrabold text-sm sm:text-base block text-amber-400">Otro monto</span>
+              <span class="text-[11px] block" style="color: var(--text-secondary);">Lo que nazca</span>
+            </button>
+          </div>
+
+          <button onclick="openYapeModal('Apoyo General - Jean Pixels')" class="w-full btn-yape-smart py-3.5 px-4 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2">
+            <i data-lucide="qr-code" class="w-4 h-4 text-[#10d9c4]"></i>
+            <span>Yapear <span id="don-selected-label">S/ 5</span> (Ver QR o Número)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="comunidad" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <div class="lg:col-span-5 liquid-glass rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 border border-emerald-500/30">
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <i data-lucide="users" class="w-3.5 h-3.5"></i> Grupo de Viajeros
+            </span>
+            <span class="text-xs font-bold text-amber-400">¡Aventura y Gloria!</span>
+          </div>
+          <h2 class="font-brand text-xl sm:text-2xl font-extrabold leading-snug">
+            Únete al grupo de WhatsApp <span class="text-emerald-400">Aventura y Gloria</span>
+          </h2>
+          <p class="text-xs sm:text-sm leading-relaxed" style="color: var(--text-secondary);">
+            Un espacio para conversar con otros viajeros que van por su cuenta, pasar datos actuales del clima y resolver dudas.
+          </p>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <a id="community-whatsapp-link" href="https://chat.whatsapp.com/GIfiSvq6lEv7SgSSIRzjDO" target="_blank" rel="noopener noreferrer" class="w-full btn-community py-3.5 px-4 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2">
+            <i data-lucide="message-square" class="w-4 h-4"></i>
+            <span>Entrar al grupo de WhatsApp</span>
+          </a>
+          <p id="community-hint-text" class="text-[11px] text-center" style="color: var(--text-secondary);"></p>
+        </div>
+      </div>
+
+      <div id="contacto" class="lg:col-span-7 liquid-glass rounded-3xl p-6 sm:p-8 space-y-5">
+        <div class="space-y-1.5">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-sky-400">Contacto directo con Jean Pixels</span>
+          <h2 id="ui-contact-title" class="font-brand text-xl sm:text-2xl font-extrabold">¿Buscas ayuda más personalizada o tienes una consulta?</h2>
+          <p id="ui-contact-desc" class="text-xs sm:text-sm" style="color: var(--text-secondary);">Si necesitas orientación para armar tu ruta, coordinar un fototour o anunciar tu marca, déjame tus datos y te escribo.</p>
+        </div>
+
+        <form onsubmit="handleContactSubmit(event)" class="space-y-3.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="text-[11px] font-semibold block mb-1" style="color: var(--text-secondary);">Tu nombre</label>
+              <input type="text" id="contact-name" required class="w-full px-4 py-3 rounded-xl liquid-glass text-xs sm:text-sm focus:outline-none focus:border-sky-400">
+            </div>
+            <div>
+              <label class="text-[11px] font-semibold block mb-1" style="color: var(--text-secondary);">Tu WhatsApp (o correo)</label>
+              <input type="text" id="contact-whatsapp" required class="w-full px-4 py-3 rounded-xl liquid-glass text-xs sm:text-sm focus:outline-none focus:border-sky-400">
+            </div>
+          </div>
+          <div>
+            <label class="text-[11px] font-semibold block mb-1" style="color: var(--text-secondary);">Cuéntame en qué te puedo ayudar</label>
+            <textarea id="contact-msg" rows="3" required placeholder="Escribe aquí tu consulta o si deseas coordinar un fototour..." class="w-full px-4 py-3 rounded-xl liquid-glass text-xs sm:text-sm focus:outline-none focus:border-sky-400"></textarea>
+          </div>
+          <button type="submit" class="w-full btn-crimson py-3.5 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Enviar mensaje</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <section id="owner-view" class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 space-y-8 hidden">
+    <div class="liquid-glass rounded-3xl p-5 sm:p-8 border-2 border-amber-400/60 space-y-5">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Estudio Privado de Jean Pixels
+          </span>
+          <h2 class="font-brand text-xl sm:text-2xl font-extrabold">Panel de Control — Rutas Visuales (Firebase Activo)</h2>
+          <p class="text-xs sm:text-sm max-w-2xl" style="color: var(--text-secondary);">
+            Tus guías, estadísticas y configuraciones ahora se sincronizan en vivo con tu base de datos en la nube.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+          <button onclick="exportUpdatedSiteForGoogleSites()" class="btn-crimson px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 shadow-xl">
+            <i data-lucide="copy-check" class="w-4 h-4"></i>
+            <span>Descargar index.html Limpio</span>
+          </button>
+          <button onclick="showPublicView()" class="liquid-glass px-4 py-3.5 rounded-2xl text-xs font-semibold hover:border-amber-400">Ver web pública</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de Estado Firebase Integrado -->
+    <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4 border border-emerald-500/40">
+      <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2 text-emerald-400">
+        <i data-lucide="cloud" class="w-5 h-5"></i>
+        <span>Estado de la Nube (Firebase Firestore Conectado)</span>
+      </h3>
+      <p id="cloud-status-desc" class="text-xs" style="color: var(--text-secondary);">
+        Tus llaves ya están incrustadas en el código. Cualquier cambio en guías o contadores se guarda automáticamente en la nube.
+      </p>
+      <div class="flex flex-wrap gap-3 pt-1">
+        <button onclick="testFirebaseConnectionReal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i> Comprobar conexión con Firebase
+        </button>
+        <button onclick="forceSaveAllToFirebase()" class="px-4 py-2 rounded-xl text-xs font-semibold liquid-glass hover:border-amber-400 flex items-center gap-1.5">
+          <i data-lucide="refresh-cw" class="w-4 h-4 text-amber-400"></i> Sincronizar datos ahora
+        </button>
+      </div>
+      <div id="firebase-diagnostic-box" class="p-3 rounded-xl bg-white/5 border border-white/10 text-xs font-mono hidden"></div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+      <div class="liquid-glass rounded-2xl p-4 sm:p-5 space-y-1">
+        <span class="text-xs flex items-center justify-between" style="color: var(--text-secondary);">
+          <span>Aperturas de Guías</span>
+          <i data-lucide="eye" class="w-4 h-4 text-sky-400"></i>
+        </span>
+        <strong id="metric-views" class="font-brand text-2xl sm:text-3xl font-extrabold block">0</strong>
+        <span class="text-[11px] text-emerald-400">En tiempo real (Nube)</span>
+      </div>
+
+      <div class="liquid-glass rounded-2xl p-4 sm:p-5 space-y-1">
+        <span class="text-xs flex items-center justify-between" style="color: var(--text-secondary);">
+          <span>Descargas Gratis</span>
+          <i data-lucide="download" class="w-4 h-4 text-amber-400"></i>
+        </span>
+        <strong id="metric-downloads" class="font-brand text-2xl sm:text-3xl font-extrabold block">0</strong>
+        <span class="text-[11px]" style="color: var(--text-secondary);">Archivos descargados</span>
+      </div>
+
+      <div class="liquid-glass rounded-2xl p-4 sm:p-5 space-y-1">
+        <span class="text-xs flex items-center justify-between" style="color: var(--text-secondary);">
+          <span>Corazones y Útil</span>
+          <i data-lucide="heart" class="w-4 h-4 text-red-400"></i>
+        </span>
+        <strong id="metric-reactions" class="font-brand text-2xl sm:text-3xl font-extrabold block">0</strong>
+        <span class="text-[11px]" style="color: var(--text-secondary);">Reacciones globales</span>
+      </div>
+
+      <div class="liquid-glass rounded-2xl p-4 sm:p-5 space-y-1">
+        <span class="text-xs flex items-center justify-between" style="color: var(--text-secondary);">
+          <span>Clics en Yapear</span>
+          <i data-lucide="qr-code" class="w-4 h-4 text-[#10d9c4]"></i>
+        </span>
+        <strong id="metric-yape" class="font-brand text-2xl sm:text-3xl font-extrabold block">0</strong>
+        <span class="text-[11px] text-[#10d9c4]">Aperturas de QR</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div class="lg:col-span-5 space-y-6">
+        <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4">
+          <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2">
+            <i data-lucide="file-up" class="w-5 h-5 text-amber-400"></i>
+            <span>1. Subir o Editar Guía Visual (.HTML)</span>
+          </h3>
+
+          <label for="html-file-input" class="block border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer hover:border-amber-400 transition" style="border-color: var(--glass-border-highlight);">
+            <i data-lucide="upload-cloud" class="w-8 h-8 text-amber-400 mx-auto mb-1.5"></i>
+            <span class="font-semibold text-xs sm:text-sm block">Selecciona el archivo .HTML de tu guía</span>
+            <span id="uploaded-filename" class="text-[11px] block mt-1 text-amber-400 font-medium">Ningún archivo seleccionado</span>
+            <input type="file" id="html-file-input" accept=".html,.htm" onchange="handleHtmlFileUpload(event)" class="hidden">
+          </label>
+
+          <form onsubmit="saveGuideFromOwnerForm(event)" class="space-y-3 pt-1">
+            <input type="hidden" id="owner-edit-id" value="">
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Nombre del Lugar *</label>
+              <input type="text" id="owner-place-title" required placeholder="Ej. Mirador de Cóndores" class="w-full px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Ubicación</label>
+                <input type="text" id="owner-location" placeholder="Ej. Cusco" class="w-full px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
+              </div>
+              <div>
+                <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Fecha</label>
+                <input type="text" id="owner-publish-date" placeholder="Ej. Noviembre 2026" class="w-full px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Video / Etiqueta</label>
+              <input type="text" id="owner-video-tag" placeholder="Ej. Guía Visual" class="w-full px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Foto Vertical de Portada *</label>
+              <div class="flex gap-2">
+                <input type="text" id="owner-cover-url" required placeholder="https://... o sube foto al lado ->" class="flex-1 px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400">
+                <label class="px-3 py-2.5 rounded-xl liquid-glass text-xs font-semibold cursor-pointer hover:border-amber-400 shrink-0 flex items-center gap-1">
+                  <i data-lucide="image" class="w-4 h-4 text-amber-400"></i>
+                  <span>Foto</span>
+                  <input type="file" accept="image/*" onchange="handleCoverImageUpload(event)" class="hidden">
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Descripción corta</label>
+              <textarea id="owner-short-desc" rows="2" placeholder="Resumen corto..." class="w-full px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-amber-400"></textarea>
+            </div>
+
+            <div class="flex gap-2 pt-1">
+              <button type="submit" class="flex-1 btn-crimson py-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span id="owner-submit-label">Guardar Guía en Catálogo</span>
+              </button>
+              <button type="button" onclick="resetOwnerForm()" class="px-3 py-3 rounded-xl liquid-glass text-xs">Limpiar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4 border border-[#10d9c4]/30">
+          <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2">
+            <i data-lucide="qr-code" class="w-5 h-5 text-[#10d9c4]"></i>
+            <span>2. Yape, WhatsApp y PIN</span>
+          </h3>
+          <form onsubmit="saveYapeAndPinConfig(event)" class="space-y-3">
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Número de Yape</label>
+              <input type="text" id="cfg-yape-phone" placeholder="Ej. 976727275" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Titular en Yape</label>
+              <input type="text" id="cfg-yape-name" placeholder="Ej. Jean J. Zarate" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Código QR de Yape</label>
+              <div class="flex gap-2">
+                <input type="text" id="cfg-yape-qr" placeholder="URL o sube captura ->" class="flex-1 px-3.5 py-2 rounded-xl liquid-glass text-xs">
+                <label class="px-3 py-2 rounded-xl liquid-glass text-xs font-semibold cursor-pointer hover:border-[#10d9c4] shrink-0">
+                  Subir QR
+                  <input type="file" accept="image/*" onchange="handleYapeQrUpload(event)" class="hidden">
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Grupo de WhatsApp</label>
+              <input type="url" id="cfg-community-url" placeholder="https://chat.whatsapp.com/..." class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">WhatsApp de Contacto (ej. 51976727275)</label>
+              <input type="text" id="cfg-contact-whatsapp" placeholder="Ej. 51976727275" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">PIN Secreto</label>
+              <input type="text" id="cfg-owner-pin" placeholder="Por defecto: 464615" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+            </div>
+            <button type="submit" class="w-full btn-yape-smart py-2.5 rounded-xl font-semibold text-xs">Guardar Configuración en Nube</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 space-y-6">
+        <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2">
+              <i data-lucide="layers" class="w-5 h-5 text-amber-400"></i>
+              <span>Tus Guías Publicadas</span>
+            </h3>
+            <button onclick="resetAllMetricsToZero()" class="text-[11px] px-3 py-1 rounded-lg liquid-glass hover:border-red-400 text-red-300">Reiniciar contadores a 0</button>
+          </div>
+          <div id="owner-guides-list" class="space-y-3"></div>
+        </div>
+
+        <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
+              <span>3. Poner Anuncio (Oculto hasta que des la orden)</span>
+            </h3>
+            <label class="flex items-center gap-2 text-xs font-semibold cursor-pointer px-3 py-1.5 rounded-xl liquid-glass border border-amber-400/40">
+              <input type="checkbox" id="cfg-show-ads" onchange="toggleAdsVisibility()" class="accent-amber-400 w-4 h-4">
+              <span class="text-amber-300">Activar anuncios en la web</span>
+            </label>
+          </div>
+          <form onsubmit="addSponsorAd(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+            <input type="text" id="ad-title" required placeholder="Nombre (Ej. Café Mirador)" class="px-3.5 py-2.5 rounded-xl liquid-glass text-xs">
+            <input type="text" id="ad-badge" placeholder="Etiqueta (Ej. Recomendado)" class="px-3.5 py-2.5 rounded-xl liquid-glass text-xs">
+            <input type="text" id="ad-desc" required placeholder="Dato corto (Ej. Descuento con la guía)" class="px-3.5 py-2.5 rounded-xl liquid-glass text-xs">
+            <input type="url" id="ad-link" placeholder="Link (https://...)" class="px-3.5 py-2.5 rounded-xl liquid-glass text-xs">
+            <button type="submit" class="sm:col-span-2 btn-crimson py-2.5 rounded-xl text-xs font-semibold">+ Guardar anuncio</button>
+          </form>
+          <div id="owner-ads-list" class="space-y-2 pt-2"></div>
+        </div>
+
+        <div class="liquid-glass rounded-3xl p-5 sm:p-6 space-y-4 border border-sky-400/30">
+          <h3 class="font-brand text-sm sm:text-base font-extrabold flex items-center gap-2">
+            <i data-lucide="file-edit" class="w-5 h-5 text-sky-400"></i>
+            <span>4. Editar Textos de la Página</span>
+          </h3>
+          <form onsubmit="saveCustomTexts(event)" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Eslogan</label>
+                <input type="text" id="txt-slogan" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+              </div>
+              <div>
+                <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Subtítulo del Hero</label>
+                <input type="text" id="txt-hero-sub" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+              </div>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Título de Yape</label>
+              <input type="text" id="txt-yape-title" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: var(--text-secondary);">Descripción de Yape</label>
+              <textarea id="txt-yape-desc" rows="2" class="w-full px-3.5 py-2 rounded-xl liquid-glass text-xs"></textarea>
+            </div>
+            <button type="submit" class="w-full btn-crimson py-2.5 rounded-xl font-semibold text-xs">Guardar textos personalizados</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="guide-modal" class="fixed inset-0 z-50 items-center justify-center p-2.5 sm:p-5 overflow-y-auto bg-black/80 backdrop-blur-md hidden">
+    <div id="guide-modal-card" class="liquid-modal rounded-3xl max-w-4xl w-full max-h-[94vh] overflow-y-auto relative my-auto animate-modal-in">
+      <div class="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 py-3.5 liquid-glass border-t-0 border-x-0 rounded-t-3xl">
+        <span id="modal-video-badge" class="text-[11px] sm:text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 truncate max-w-[75%]">Guía Visual</span>
+        <button onclick="closeGuideModal()" class="w-9 h-9 rounded-xl liquid-glass flex items-center justify-center hover:border-amber-400 shrink-0">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-7 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-center">
+          <div class="md:col-span-5 max-w-[210px] sm:max-w-[245px] mx-auto w-full">
+            <div class="poster-box">
+              <img id="modal-poster-img" src="" alt="Portada" class="poster-img">
+            </div>
+          </div>
+
+          <div class="md:col-span-7 space-y-4">
+            <div class="space-y-1.5 text-center md:text-left">
+              <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs font-semibold uppercase tracking-wider text-sky-400">
+                <span id="modal-location" class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i><span>Cusco</span></span>
+                <span>•</span>
+                <span id="modal-date" class="text-[11px] font-normal normal-case" style="color: var(--text-secondary);">Noviembre 2026</span>
+              </div>
+              <h2 id="modal-title" class="font-hero text-2xl sm:text-3xl font-extrabold leading-tight">Título</h2>
+              <p id="modal-desc" class="text-xs sm:text-sm leading-relaxed pt-1" style="color: var(--text-secondary);">Descripción</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
+              <button onclick="openInteractiveBookReader()" class="btn-crimson py-3.5 px-4 rounded-2xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2">
+                <i data-lucide="book-open" class="w-4 h-4 text-amber-300"></i>
+                <span>Abrir Guía Visual Aquí</span>
+              </button>
+              <button onclick="downloadCurrentGuideHtml()" class="liquid-glass py-3.5 px-4 rounded-2xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 hover:border-amber-400">
+                <i data-lucide="download" class="w-4 h-4 text-sky-400"></i>
+                <span>Descargar Gratis</span>
+              </button>
+            </div>
+
+            <div class="rounded-2xl p-3.5 text-xs leading-relaxed border border-amber-500/30 bg-amber-500/10 flex items-start gap-2.5 text-left">
+              <i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+              <p style="color: var(--text-secondary);">
+                <strong class="text-amber-300">Dato antes de salir:</strong> Los costos de pasajes o entradas pueden variar. Verifica la información antes de iniciar tu ruta.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1">
+              <button onclick="toggleReaction('like')" id="react-like-btn" class="liquid-glass px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5" style="border-color: var(--glass-border);">
+                <i data-lucide="heart" id="react-like-icon" class="w-4 h-4 text-red-500"></i>
+                <span>Me gusta</span>
+                <span id="react-like-count" class="px-1.5 py-0.5 rounded bg-white/10">0</span>
+              </button>
+
+              <button onclick="toggleReaction('useful')" id="react-useful-btn" class="liquid-glass px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5" style="border-color: var(--glass-border);">
+                <i data-lucide="thumbs-up" class="w-4 h-4 text-amber-400"></i>
+                <span>Me sirvió</span>
+                <span id="react-useful-count" class="px-1.5 py-0.5 rounded bg-white/10">0</span>
+              </button>
+
+              <button onclick="openYapeFromCurrentGuide()" class="btn-yape-smart px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5">
+                <i data-lucide="qr-code" class="w-4 h-4 text-[#10d9c4]"></i>
+                <span>Yapear a Jean Pixels</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="interactive-reader-box" class="space-y-2.5 pt-2 animate-modal-in hidden">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs px-1">
+            <span class="font-semibold text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="compass" class="w-4 h-4"></i>
+              <span>Guía visual interactiva</span>
+            </span>
+            <div class="flex items-center gap-3">
+              <button onclick="openGuideInFullTab()" class="text-sky-400 font-semibold hover:underline flex items-center gap-1">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                <span>Pantalla completa</span>
+              </button>
+              <button onclick="closeInteractiveBookReader()" class="underline" style="color: var(--text-secondary);">Cerrar lector</button>
+            </div>
+          </div>
+          <div class="w-full h-[65vh] sm:h-[520px] rounded-2xl overflow-hidden border border-amber-400/40 bg-black shadow-2xl">
+            <iframe id="guide-html-iframe" class="w-full h-full border-0" sandbox="allow-scripts allow-same-origin allow-popups" srcdoc=""></iframe>
+          </div>
+        </div>
+
+        <div class="border-t pt-5 space-y-4" style="border-color: var(--glass-border);">
+          <h3 class="font-brand text-xs sm:text-sm font-bold flex items-center gap-2">
+            <i data-lucide="message-circle" class="w-4 h-4 text-sky-400"></i>
+            <span>COMENTARIOS Y DATOS RECIENTES DE LA RUTA</span>
+          </h3>
+
+          <form onsubmit="submitComment(event)" class="flex flex-col sm:flex-row gap-2">
+            <input type="text" id="comment-author" required placeholder="Tu nombre" class="sm:w-1/4 px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-sky-400">
+            <input type="text" id="comment-text" required placeholder="¿Fuiste hace poco? Cuenta si algún costo cambió..." class="flex-1 px-3.5 py-2.5 rounded-xl liquid-glass text-xs focus:outline-none focus:border-sky-400">
+            <button type="submit" class="btn-crimson px-4 py-2.5 rounded-xl text-xs font-semibold shrink-0">Publicar</button>
+          </form>
+
+          <div id="modal-comments-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="yape-modal" class="fixed inset-0 z-50 items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden">
+    <div class="liquid-modal rounded-3xl max-w-sm w-full p-6 space-y-4 border border-[#10d9c4]/50 text-center relative animate-modal-in">
+      <button onclick="closeYapeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-xl liquid-glass flex items-center justify-center">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl btn-yape-smart mx-auto flex items-center justify-center font-brand font-extrabold text-base text-[#10d9c4]">S/</div>
+
+      <div class="space-y-1">
+        <h3 class="font-brand text-lg font-extrabold">Yapear a Jean Pixels</h3>
+        <p class="text-xs" style="color: var(--text-secondary);">
+          Opción elegida: <strong id="yape-modal-amount" class="text-amber-300">S/ 5</strong>
+        </p>
+      </div>
+
+      <div class="bg-white p-3.5 rounded-2xl w-52 h-52 mx-auto flex items-center justify-center shadow-lg">
+        <img id="yape-qr-img" src="" alt="QR" class="w-full h-full object-contain rounded-lg">
+      </div>
+
+      <div class="liquid-glass rounded-2xl p-3 space-y-2 text-xs">
+        <div class="flex items-center justify-between">
+          <span style="color: var(--text-secondary);">Titular:</span>
+          <strong id="yape-holder-display">Jean J. Zarate</strong>
+        </div>
+        <div id="yape-phone-row" class="flex items-center justify-between border-t pt-2" style="border-color: var(--glass-border);">
+          <span style="color: var(--text-secondary);">Número Yape:</span>
+          <div class="flex items-center gap-1.5">
+            <strong id="yape-phone-display" class="text-[#10d9c4] font-mono">976727275</strong>
+            <button onclick="copyYapeNumber()" class="px-2 py-0.5 rounded bg-[#10d9c4]/20 text-[#10d9c4] text-[11px] font-semibold">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="closeYapeModal()" class="w-full btn-yape-smart py-3 rounded-xl font-semibold text-xs">¡Listo, muchas gracias!</button>
+    </div>
+  </div>
+
+  <div id="pin-modal" class="fixed inset-0 z-50 items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden">
+    <div class="liquid-modal rounded-3xl max-w-xs w-full p-6 space-y-4 text-center animate-modal-in">
+      <div class="w-10 h-10 rounded-xl btn-crimson mx-auto flex items-center justify-center">
+        <i data-lucide="lock" class="w-5 h-5 text-amber-300"></i>
+      </div>
+      <h3 class="font-brand text-base font-extrabold">Acceso de Dueño</h3>
+      <p class="text-xs" style="color: var(--text-secondary);">Ingresa tu PIN privado.</p>
+      <form onsubmit="verifyOwnerPin(event)" class="space-y-3">
+        <input type="password" id="pin-input" required placeholder="••••" class="w-full text-center tracking-widest text-lg font-bold px-4 py-2.5 rounded-xl liquid-glass focus:outline-none focus:border-amber-400">
+        <div class="flex gap-2">
+          <button type="button" onclick="closePinModal()" class="flex-1 py-2.5 rounded-xl liquid-glass text-xs font-semibold">Cancelar</button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl btn-crimson text-xs font-semibold">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-5 right-5 z-50 liquid-modal px-4 py-3 rounded-2xl text-xs font-semibold flex items-center gap-2.5 border border-amber-400/40 hidden">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-400 shrink-0"></i>
+    <span id="toast-text"></span>
+  </div>
+
+  <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-10 border-t text-xs flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left" style="border-color: var(--glass-border); color: var(--text-secondary);">
+    <p class="flex items-center justify-center sm:justify-start gap-1.5 select-none">
+      <span onclick="handleSecretLockClick()" class="cursor-default opacity-40 hover:opacity-80 transition">🔒</span>
+      <span>© Rutas Visuales por <strong>Jean Pixels</strong> — No soy guía oficial de turismo.</span>
+    </p>
+    <div class="flex items-center gap-4">
+      <a href="#apoyar" class="hover:text-amber-400">Yapear</a>
+      <a href="#comunidad" class="hover:text-emerald-400">Comunidad</a>
+      <a href="#contacto" class="hover:text-sky-400">Contacto</a>
+    </div>
+  </footer>
+
+  <script>
+    const EMBEDDED_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyB01AhISGzCR6CMeagVb5K-F4FzH9cLaWA",
+      authDomain: "rutas-visuales-601d6.firebaseapp.com",
+      projectId: "rutas-visuales-601d6",
+      storageBucket: "rutas-visuales-601d6.firebasestorage.app",
+      messagingSenderId: "321289940485",
+      appId: "1:321289940485:web:e2adb66ace07e95845366c",
+      measurementId: "G-G3PH2PWRBG"
+    };
+
+    const INITIAL_GUIDES = [
+      {
+        id: "g-1793054913489",
+        title: "Maras",
+        location: "Maras, Urubamba, Cusco",
+        publishDate: "Diciembre 2024",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/d4cDF4vC/HID-9141.jpg",
+        shortDesc: "Galería a Cielo Abierto",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Maras</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Maras</h1><p>Guía visual por Jean Pixels.</p></body></html>"
+      },
+      {
+        id: "g-1793054615556",
+        title: "Laguna Turquesa de Maranganí",
+        location: "Occobamba, Maranganí, Canchis, Cusco.",
+        publishDate: "Setiembre 2026",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/8g26C2YC/DJI-0122-11zon.jpg",
+        shortDesc: "Espejo de agua glaciar sobre la cordillera de Canchis.",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Laguna Maranganí</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Laguna Turquesa</h1><p>Guía por Jean Pixels.</p></body></html>"
+      },
+      {
+        id: "g-1793054529633",
+        title: "El Muelle Solitario",
+        location: "Anta, Cusco",
+        publishDate: "Julio 2026",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/9kbxRQyQ/HID-8293.jpg",
+        shortDesc: "Un refugio de silencio en la laguna de Huaypo.",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Muelle Solitario</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>El Muelle Solitario</h1><p>Guía por Jean Pixels.</p></body></html>"
+      },
+      {
+        id: "g-1793054376806",
+        title: "3 Puentes de Checacupe",
+        location: "Checacupe, Canchis, Cusco.",
+        publishDate: "Octubre 2025",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/W4jR6P6F/Gemini-Generated-Image-p37q7jp37q7jp37q.jpg",
+        shortDesc: "Inca, Colonial y Republicano en una sola vista.",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Checacupe</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>3 Puentes de Checacupe</h1><p>Guía por Jean Pixels.</p></body></html>"
+      },
+      {
+        id: "g-1793054314241",
+        title: "Vortice de Hierro",
+        location: "La Raya, Cusco - Puno.",
+        publishDate: "Mayo 2024",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/jvBFppjB/compress152839-1.jpg",
+        shortDesc: "Frontera de metal en Abra La Raya.",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Vórtice de Hierro</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Vórtice de Hierro</h1><p>Guía por Jean Pixels.</p></body></html>"
+      },
+      {
+        id: "g-1793054234703",
+        title: "Cascada Huacamani",
+        location: "Livitaca, Chumbivilcas, Cusco.",
+        publishDate: "Noviembre 2023",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/21nJdMNG/HID-4644.jpg",
+        shortDesc: "El grito de la montaña en Chumbivilcas.",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Huacamani</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Cascada Huacamani</h1><p>Guía por Jean Pixels.</p></body></html>"
+      },
+      {
+        id: "g-1793054164108",
+        title: "Quellhuacocha, La Laguna de las Dos Caras",
+        location: "Quisini, Maranganí, Canchis, Cusco.",
+        publishDate: "Noviembre 2025",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/9kRgP1Lx/HID-7092.jpg",
+        shortDesc: "Archipiélago turquesa en altura.",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Quellhuacocha</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Quellhuacocha</h1><p>Guía por Jean Pixels.</p></body></html>"
+      },
+      {
+        id: "g-1793054096737",
+        title: "Laguna de Quillca",
+        location: "Occobamba, Maranganí, Canchis, Cusco.",
+        publishDate: "Febrero 2026",
+        videoTag: "Guía Visual",
+        cover: "https://i.ibb.co/JRCb4RGS/HID-0317.jpg",
+        shortDesc: "Joyita oculta de Occobamba.",
+        likes: 0,
+        useful: 0,
+        views: 0,
+        downloads: 0,
+        comments: [],
+        htmlContent: "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Quillca</title></head><body style='background:#111;color:#fff;font-family:sans-serif;padding:20px;'><h1>Laguna de Quillca</h1><p>Guía por Jean Pixels.</p></body></html>"
+      }
+    ];
+
+    const DEFAULT_CONFIG = {
+      ownerPin: "464615",
+      yapePhone: "976727275",
+      yapeHolder: "Jean J. Zarate",
+      yapeQrUrl: "https://i.ibb.co/0yrNM8Zv/Whats-App-Image-2026-10-26-at-17-53-46.jpg",
+      communityUrl: "https://chat.whatsapp.com/GIfiSvq6lEv7SgSSIRzjDO",
+      contactWhatsapp: "51976727275",
+      yapeClicks: 0,
+      showAds: false,
+      sponsors: [],
+      customTexts: {
+        slogan: "¡Aventura y Gloria!",
+        heroSub: "Toca cualquier portada para revisar la guía en tu pantalla o descargarla gratis antes de salir a la ruta.",
+        yapeTitle: "¿Te sirvió alguna guía para armar tu ruta?",
+        yapeDesc: "Estas guías visuales son gratis para que te animes a salir por tu cuenta. Si el contenido te ahorró tiempo, puedes invitarme un café o apoyar mi trabajo por Yape."
+      }
+    };
+
+    let db = null;
+    let isFirebaseConnected = false;
+    let guides = [];
+    let siteConfig = {};
+    let userReacts = {};
+    let activeGuideId = null;
+    let pendingUploadedHtml = "";
+    let selectedDonationLabel = "S/ 5";
+    let isOwnerUnlocked = false;
+    let isOwnerViewOpen = false;
+    let secretClickCount = 0;
+    let secretClickTimer = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initAutoTheme();
+      initFirebaseAndLoad();
+
+      window.addEventListener('resize', adaptCommunityHint);
+      adaptCommunityHint();
+
+      window.addEventListener('keydown', (e) => {
+        if (e.altKey && e.key.toLowerCase() === 'm') {
+          openOwnerAccess();
+        }
+      });
+    });
+
+    function initAutoTheme() {
+      const savedTheme = localStorage.getItem('rutas_theme_v6');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+      } else {
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        const autoTheme = prefersLight ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', autoTheme);
+        updateThemeIcon(autoTheme);
+      }
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('rutas_theme_v6', next);
+      updateThemeIcon(next);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById('theme-icon');
+      if (!icon) return;
+      icon.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
+      lucide.createIcons();
+    }
+
+    function adaptCommunityHint() {
+      const hint = document.getElementById('community-hint-text');
+      if (!hint) return;
+      if (window.innerWidth >= 1024) {
+        hint.innerHTML = '¿Trato directo conmigo, ayuda 1 a 1 o fototour? Escríbeme al lado 👉';
+      } else {
+        hint.innerHTML = '¿Trato directo conmigo, ayuda 1 a 1 o fototour? Escríbeme aquí abajo 👇';
+      }
+    }
+
+    function initFirebaseAndLoad() {
+      guides = JSON.parse(JSON.stringify(INITIAL_GUIDES));
+      siteConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+      userReacts = JSON.parse(localStorage.getItem('rutas_reacts_v6') || '{}');
+
+      try {
+        if (typeof firebase !== 'undefined' && EMBEDDED_FIREBASE_CONFIG && EMBEDDED_FIREBASE_CONFIG.apiKey) {
+          if (!firebase.apps.length) {
+            firebase.initializeApp(EMBEDDED_FIREBASE_CONFIG);
+          }
+          db = firebase.firestore();
+          isFirebaseConnected = true;
+          
+          // Sincronizar en tiempo real desde Firestore
+          db.collection('rutas_visuales').doc('guides_catalog').onSnapshot((doc) => {
+            if (doc.exists && doc.data().guides) {
+              guides = doc.data().guides;
+              renderPosters();
+              if (isOwnerViewOpen) renderOwnerDashboard();
+            } else {
+              saveGuidesToFirebase();
+            }
+          }, (err) => { console.warn("Firestore error:", err); });
+
+          db.collection('rutas_visuales').doc('site_config').onSnapshot((doc) => {
+            if (doc.exists && doc.data().config) {
+              siteConfig = { ...DEFAULT_CONFIG, ...doc.data().config };
+              applyConfigToDOM();
+              if (isOwnerViewOpen) renderOwnerDashboard();
+            } else {
+              saveConfigToFirebase();
+            }
+          }, (err) => { console.warn("Firestore error:", err); });
+
+          updateCloudStatusBadges(true);
+        } else {
+          loadFromLocalFallback();
+        }
+      } catch (err) {
+        console.warn("Fallo al conectar Firebase:", err);
+        loadFromLocalFallback();
+      }
+
+      applyConfigToDOM();
+      renderPosters();
+      renderSponsors();
+      renderOwnerDashboard();
+      lucide.createIcons();
+    }
+
+    function loadFromLocalFallback() {
+      const savedGuides = localStorage.getItem('rutas_guides_v6');
+      const savedConfig = localStorage.getItem('rutas_config_v6');
+      if (savedGuides) guides = JSON.parse(savedGuides);
+      if (savedConfig) siteConfig = { ...DEFAULT_CONFIG, ...JSON.parse(savedConfig) };
+      updateCloudStatusBadges(false);
+    }
+
+    function saveGuidesToFirebase() {
+      if (isFirebaseConnected && db) {
+        db.collection('rutas_visuales').doc('guides_catalog').set({ guides })
+          .catch(err => console.error("Error guardando guías:", err));
+      } else {
+        localStorage.setItem('rutas_guides_v6', JSON.stringify(guides));
+      }
+    }
+
+    function saveConfigToFirebase() {
+      if (isFirebaseConnected && db) {
+        db.collection('rutas_visuales').doc('site_config').set({ config: siteConfig })
+          .catch(err => console.error("Error guardando config:", err));
+      } else {
+        localStorage.setItem('rutas_config_v6', JSON.stringify(siteConfig));
+      }
+    }
+
+    function saveData() {
+      saveGuidesToFirebase();
+      saveConfigToFirebase();
+      localStorage.setItem('rutas_reacts_v6', JSON.stringify(userReacts));
+    }
+
+    function testFirebaseConnectionReal() {
+      const box = document.getElementById('firebase-diagnostic-box');
+      if (!box) return;
+      box.classList.remove('hidden');
+      box.innerHTML = '🔄 Probando lectura y escritura en tu Firestore...';
+
+      if (!isFirebaseConnected || !db) {
+        box.innerHTML = '❌ Error: Firebase no está inicializado.';
+        box.className = 'p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-xs font-mono text-red-300';
+        return;
+      }
+
+      db.collection('rutas_visuales').doc('ping').set({ time: new Date().toISOString() })
+        .then(() => {
+          box.innerHTML = '✅ <strong>¡Conexión exitosa!</strong> Firestore respondió correctamente y guardó los datos en tu proyecto <code>' + EMBEDDED_FIREBASE_CONFIG.projectId + '</code>.';
+          box.className = 'p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-mono text-emerald-300';
+          updateCloudStatusBadges(true);
+          showToast('¡Firebase conectado y sincronizado con éxito!');
+        })
+        .catch(err => {
+          box.innerHTML = '❌ <strong>Error de Permisos en Firestore:</strong><br>' + err.message + '<br><small>Recuerda entrar a tu consola de Firebase > Firestore Database > Reglas y cambiar <code>if false;</code> por <code>if true;</code>.</small>';
+          box.className = 'p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-xs font-mono text-red-300';
+        });
+    }
+
+    function forceSaveAllToFirebase() {
+      saveGuidesToFirebase();
+      saveConfigToFirebase();
+      showToast('Datos forzados y guardados en la nube');
+      testFirebaseConnectionReal();
+    }
+
+    function updateCloudStatusBadges(connected) {
+      const desc = document.getElementById('cloud-status-desc');
+      if (desc) {
+        if (connected) {
+          desc.innerHTML = '<span class="text-emerald-400 font-bold">✅ Sincronizado en tiempo real con Firebase Firestore</span>';
+        } else {
+          desc.innerHTML = '<span class="text-amber-400 font-bold">⚠️ Usando almacenamiento local temporal.</span>';
+        }
+      }
+    }
+
+    function applyConfigToDOM() {
+      document.getElementById('cfg-yape-phone').value = siteConfig.yapePhone || '';
+      document.getElementById('cfg-yape-name').value = siteConfig.yapeHolder || 'Jean Pixels';
+      document.getElementById('cfg-yape-qr').value = siteConfig.yapeQrUrl || '';
+      document.getElementById('cfg-community-url').value = siteConfig.communityUrl || '';
+      document.getElementById('cfg-contact-whatsapp').value = siteConfig.contactWhatsapp || '';
+      document.getElementById('cfg-owner-pin').value = siteConfig.ownerPin || '464615';
+      document.getElementById('cfg-show-ads').checked = siteConfig.showAds === true;
+
+      const t = siteConfig.customTexts || DEFAULT_CONFIG.customTexts;
+      document.getElementById('txt-slogan').value = t.slogan || '';
+      document.getElementById('txt-hero-sub').value = t.heroSub || '';
+      document.getElementById('txt-yape-title').value = t.yapeTitle || '';
+      document.getElementById('txt-yape-desc').value = t.yapeDesc || '';
+
+      if (t.slogan) document.getElementById('ui-slogan-badge').textContent = t.slogan;
+      if (t.heroSub) document.getElementById('ui-hero-subtitle').textContent = t.heroSub;
+      if (t.yapeTitle) document.getElementById('ui-yape-title').textContent = t.yapeTitle;
+      if (t.yapeDesc) document.getElementById('ui-yape-desc').textContent = t.yapeDesc;
+
+      const commLink = document.getElementById('community-whatsapp-link');
+      if (commLink && siteConfig.communityUrl) commLink.href = siteConfig.communityUrl;
+    }
+
+    function saveCustomTexts(e) {
+      e.preventDefault();
+      if (!siteConfig.customTexts) siteConfig.customTexts = {};
+      siteConfig.customTexts.slogan = document.getElementById('txt-slogan').value.trim();
+      siteConfig.customTexts.heroSub = document.getElementById('txt-hero-sub').value.trim();
+      siteConfig.customTexts.yapeTitle = document.getElementById('txt-yape-title').value.trim();
+      siteConfig.customTexts.yapeDesc = document.getElementById('txt-yape-desc').value.trim();
+
+      applyConfigToDOM();
+      saveData();
+      showToast('¡Textos actualizados y guardados en la nube!');
+    }
+
+    function renderPosters() {
+      const grid = document.getElementById('posters-grid');
+      const empty = document.getElementById('empty-posters');
+      const query = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+      const clearBtn = document.getElementById('clear-search-btn');
+
+      if (clearBtn) clearBtn.classList.toggle('hidden', query.length === 0);
+
+      const filtered = guides.filter(g => {
+        if (!query) return true;
+        return (
+          g.title.toLowerCase().includes(query) ||
+          g.location.toLowerCase().includes(query) ||
+          (g.videoTag && g.videoTag.toLowerCase().includes(query)) ||
+          (g.shortDesc && g.shortDesc.toLowerCase().includes(query))
+        );
+      });
+
+      document.getElementById('guides-counter').textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      grid.innerHTML = filtered.map((g, idx) => {
+        const hasLikes = (g.likes || 0) > 0;
+        const userLiked = userReacts[g.id]?.like;
+        const heartFillClass = (hasLikes || userLiked) ? 'text-red-500 fill-red-500' : 'text-white/70';
+
+        return `
+        <article onclick="openGuideModal('${g.id}')" style="animation-delay: ${idx * 60}ms" class="poster-card cursor-pointer group flex flex-col">
+          <div class="poster-box">
+            <img src="${g.cover}" alt="${g.title}" loading="lazy" class="poster-img" onerror="this.src='https://placehold.co/600x900/1a080c/fbbf24?text=Guia+Visual'" />
+            <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-black/70 text-amber-300 backdrop-blur-md border border-amber-400/25 truncate">
+                ${g.location}
+              </span>
+            </div>
+            <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/90 via-black/45 to-transparent z-10"></div>
+            <div class="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between text-[11px] text-white/95">
+              <span class="flex items-center gap-1 font-semibold">
+                <i data-lucide="heart" class="w-3.5 h-3.5 ${heartFillClass}"></i>
+                <span>${g.likes || 0}</span>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-md bg-amber-400 text-black font-extrabold text-[10px] shadow">Abrir guía</span>
+            </div>
+          </div>
+          <div class="pt-3 px-1 space-y-0.5">
+            <h3 class="font-hero font-bold text-base sm:text-lg leading-snug group-hover:text-amber-400 transition-colors">${g.title}</h3>
+            <p class="text-[11px] truncate" style="color: var(--text-secondary);">${g.videoTag || g.location}</p>
+          </div>
+        </article>
+      `}).join('');
+
+      lucide.createIcons();
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      renderPosters();
+    }
+
+    function renderSponsors() {
+      const section = document.getElementById('sponsors-section');
+      const grid = document.getElementById('sponsors-grid');
+      if (siteConfig.showAds !== true || !siteConfig.sponsors || siteConfig.sponsors.length === 0) {
+        section.classList.add('hidden');
+        return;
+      }
+      section.classList.remove('hidden');
+
+      grid.innerHTML = siteConfig.sponsors.map(ad => `
+        <a href="${ad.link || '#contacto'}" target="${ad.link?.startsWith('http') ? '_blank' : '_self'}" class="liquid-glass rounded-2xl p-4 flex items-center justify-between gap-3 hover:border-amber-400 transition group">
+          <div class="space-y-0.5 min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">${ad.badge || 'Recomendado'}</span>
+            <h4 class="font-brand font-bold text-xs sm:text-sm truncate group-hover:text-amber-300">${ad.title}</h4>
+            <p class="text-xs truncate" style="color: var(--text-secondary);">${ad.desc}</p>
+          </div>
+          <i data-lucide="arrow-up-right" class="w-4 h-4 text-sky-400 shrink-0"></i>
+        </a>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function openGuideModal(id) {
+      const g = guides.find(item => item.id === id);
+      if (!g) return;
+      activeGuideId = id;
+
+      g.views = (g.views || 0) + 1;
+      saveData();
+      renderOwnerDashboard();
+
+      document.getElementById('modal-poster-img').src = g.cover;
+      document.getElementById('modal-location').innerHTML = `<i data-lucide="map-pin" class="w-3.5 h-3.5"></i><span>${g.location}</span>`;
+      document.getElementById('modal-date').textContent = g.publishDate ? `Publicado: ${g.publishDate}` : 'Fecha referencial';
+      document.getElementById('modal-title').textContent = g.title;
+      document.getElementById('modal-desc').textContent = g.shortDesc || '';
+      document.getElementById('modal-video-badge').textContent = g.videoTag || 'Guía Visual';
+
+      closeInteractiveBookReader();
+      updateModalReactionsUI();
+      renderModalComments();
+
+      const modal = document.getElementById('guide-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+    }
+
+    function closeGuideModal() {
+      const modal = document.getElementById('guide-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = 'auto';
+      activeGuideId = null;
+    }
+
+    function openInteractiveBookReader() {
+      const g = guides.find(item => item.id === activeGuideId);
+      if (!g) return;
+      const box = document.getElementById('interactive-reader-box');
+      const iframe = document.getElementById('guide-html-iframe');
+      box.classList.remove('hidden');
+      iframe.srcdoc = g.htmlContent || '<html><body><h1>' + g.title + '</h1></body></html>';
+      setTimeout(() => { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    }
+
+    function openGuideInFullTab() {
+      const g = guides.find(item => item.id === activeGuideId);
+      if (!g) return;
+      const htmlString = g.htmlContent || '<html><body><h1>' + g.title + '</h1></body></html>';
+      const blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' });
+      window.open(URL.createObjectURL(blob), '_blank');
+    }
+
+    function closeInteractiveBookReader() {
+      document.getElementById('interactive-reader-box').classList.add('hidden');
+    }
+
+    function downloadCurrentGuideHtml() {
+      const g = guides.find(item => item.id === activeGuideId);
+      if (!g) return;
+
+      g.downloads = (g.downloads || 0) + 1;
+      saveData();
+      renderOwnerDashboard();
+
+      const htmlString = g.htmlContent || '<html><body><h1>' + g.title + '</h1></body></html>';
+      const blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Guia-Visual-${g.title.replace(/\s+/g, '-')}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`Descargando "${g.title}" gratis...`);
+    }
+
+    function toggleReaction(type) {
+      const g = guides.find(item => item.id === activeGuideId);
+      if (!g) return;
+
+      if (!userReacts[activeGuideId]) userReacts[activeGuideId] = {};
+      const current = !!userReacts[activeGuideId][type];
+      userReacts[activeGuideId][type] = !current;
+
+      if (type === 'like') g.likes = Math.max(0, (g.likes || 0) + (userReacts[activeGuideId].like ? 1 : -1));
+      if (type === 'useful') g.useful = Math.max(0, (g.useful || 0) + (userReacts[activeGuideId].useful ? 1 : -1));
+
+      saveData();
+      updateModalReactionsUI();
+      renderPosters();
+      renderOwnerDashboard();
+    }
+
+    function updateModalReactionsUI() {
+      const g = guides.find(item => item.id === activeGuideId);
+      if (!g) return;
+      const r = userReacts[activeGuideId] || {};
+
+      document.getElementById('react-like-count').textContent = g.likes || 0;
+      document.getElementById('react-useful-count').textContent = g.useful || 0;
+
+      document.getElementById('react-like-btn').style.borderColor = r.like ? '#e50914' : 'var(--glass-border)';
+      document.getElementById('react-useful-btn').style.borderColor = r.useful ? '#fbbf24' : 'var(--glass-border)';
+    }
+
+    function renderModalComments() {
+      const g = guides.find(item => item.id === activeGuideId);
+      if (!g) return;
+      const list = document.getElementById('modal-comments-list');
+
+      if (!g.comments || g.comments.length === 0) {
+        list.innerHTML = `<p class="text-xs italic" style="color: var(--text-secondary);">Aún no hay comentarios. ¡Sé el primero en comentar!</p>`;
+        return;
+      }
+
+      list.innerHTML = g.comments.map(c => `
+        <div class="liquid-glass px-3.5 py-2.5 rounded-xl text-xs">
+          <strong class="text-amber-400">${c.author}:</strong>
+          <span class="ml-1" style="color: var(--text-primary);">${c.text}</span>
+        </div>
+      `).join('');
+    }
+
+    function submitComment(e) {
+      e.preventDefault();
+      const g = guides.find(item => item.id === activeGuideId);
+      if (!g) return;
+
+      const author = document.getElementById('comment-author').value.trim();
+      const text = document.getElementById('comment-text').value.trim();
+      if (!author || !text) return;
+
+      if (!g.comments) g.comments = [];
+      g.comments.unshift({ author, text });
+      document.getElementById('comment-author').value = '';
+      document.getElementById('comment-text').value = '';
+
+      saveData();
+      renderModalComments();
+      renderOwnerDashboard();
+      showToast('Comentario publicado en la nube');
+    }
+
+    function selectDonation(idKey, labelText) {
+      selectedDonationLabel = labelText;
+      ['5', '15', '30', 'libre'].forEach(val => {
+        const btn = document.getElementById(`don-btn-${val}`);
+        if (btn) btn.style.borderColor = String(val) === String(idKey) ? '#10d9c4' : 'transparent';
+      });
+      document.getElementById('don-selected-label').textContent = labelText;
+    }
+
+    function openYapeFromCurrentGuide() {
+      const g = guides.find(item => item.id === activeGuideId);
+      openYapeModal(`Guía: ${g ? g.title : 'General'}`);
+    }
+
+    function openYapeModal(originLabel) {
+      siteConfig.yapeClicks = (siteConfig.yapeClicks || 0) + 1;
+      saveData();
+      renderOwnerDashboard();
+
+      document.getElementById('yape-modal-amount').textContent = selectedDonationLabel;
+      document.getElementById('yape-qr-img').src = siteConfig.yapeQrUrl || DEFAULT_CONFIG.yapeQrUrl;
+      document.getElementById('yape-holder-display').textContent = siteConfig.yapeHolder || 'Jean Pixels';
+      
+      const phoneRow = document.getElementById('yape-phone-row');
+      if (siteConfig.yapePhone) {
+        phoneRow.classList.remove('hidden');
+        document.getElementById('yape-phone-display').textContent = siteConfig.yapePhone;
+      } else {
+        phoneRow.classList.add('hidden');
+      }
+
+      const modal = document.getElementById('yape-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeYapeModal() {
+      const modal = document.getElementById('yape-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function copyYapeNumber() {
+      const num = (siteConfig.yapePhone || '').replace(/\s+/g, '');
+      const temp = document.createElement('textarea');
+      temp.value = num;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast(`Número ${num} copiado`);
+    }
+
+    function handleSecretLockClick() {
+      secretClickCount++;
+      clearTimeout(secretClickTimer);
+      secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 800);
+
+      if (secretClickCount >= 2) {
+        secretClickCount = 0;
+        openOwnerAccess();
+      }
+    }
+
+    function openOwnerAccess() {
+      if (isOwnerUnlocked) {
+        toggleOwnerView();
+        return;
+      }
+      document.getElementById('pin-input').value = '';
+      const modal = document.getElementById('pin-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      setTimeout(() => document.getElementById('pin-input').focus(), 100);
+    }
+
+    function closePinModal() {
+      const modal = document.getElementById('pin-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function verifyOwnerPin(e) {
+      e.preventDefault();
+      const entered = document.getElementById('pin-input').value.trim();
+      const validPin = siteConfig.ownerPin || '464615';
+
+      if (entered === validPin) {
+        isOwnerUnlocked = true;
+        closePinModal();
+        document.getElementById('owner-active-pill').classList.remove('hidden');
+        document.getElementById('owner-active-pill').classList.add('flex');
+        isOwnerViewOpen = false;
+        toggleOwnerView();
+        showToast('Modo Dueño desbloqueado');
+      } else {
+        showToast('PIN incorrecto');
+      }
+    }
+
+    function lockOwnerMode() {
+      isOwnerUnlocked = false;
+      showPublicView();
+      document.getElementById('owner-active-pill').classList.add('hidden');
+      document.getElementById('owner-active-pill').classList.remove('flex');
+      showToast('Modo Dueño cerrado');
+    }
+
+    function toggleOwnerView() {
+      if (!isOwnerUnlocked) {
+        openOwnerAccess();
+        return;
+      }
+      isOwnerViewOpen = !isOwnerViewOpen;
+      document.getElementById('public-view').classList.toggle('hidden', isOwnerViewOpen);
+      document.getElementById('owner-view').classList.toggle('hidden', !isOwnerViewOpen);
+      document.getElementById('owner-mode-label').textContent = isOwnerViewOpen ? 'Volver a la Web' : 'Panel de Dueño';
+      if (isOwnerViewOpen) renderOwnerDashboard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showPublicView() {
+      isOwnerViewOpen = false;
+      document.getElementById('public-view').classList.remove('hidden');
+      document.getElementById('owner-view').classList.add('hidden');
+    }
+
+    function handleHtmlFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      document.getElementById('uploaded-filename').textContent = `Archivo: ${file.name}`;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const rawHtml = e.target.result;
+        pendingUploadedHtml = rawHtml;
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawHtml, 'text/html');
+        const extractedTitle = doc.querySelector('h1')?.textContent?.trim() || doc.querySelector('title')?.textContent?.trim() || file.name.replace(/\.html?$/i, '');
+        const ogImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
+        const firstImg = doc.querySelector('img')?.getAttribute('src');
+
+        document.getElementById('owner-place-title').value = extractedTitle;
+        if (ogImage || firstImg) document.getElementById('owner-cover-url').value = ogImage || firstImg;
+        showToast('¡HTML cargado con éxito!');
+      };
+      reader.readAsText(file);
+    }
+
+    function compressImageToDataUrl(file, maxWidth, callback) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const ratio = Math.min(1, maxWidth / img.width);
+          canvas.width = img.width * ratio;
+          canvas.height = img.height * ratio;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          callback(canvas.toDataURL('image/jpeg', 0.82));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleCoverImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      compressImageToDataUrl(file, 650, (dataUrl) => {
+        document.getElementById('owner-cover-url').value = dataUrl;
+        showToast('Foto lista');
+      });
+    }
+
+    function handleYapeQrUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      compressImageToDataUrl(file, 450, (dataUrl) => {
+        document.getElementById('cfg-yape-qr').value = dataUrl;
+        showToast('QR de Yape cargado');
+      });
+    }
+
+    function saveGuideFromOwnerForm(e) {
+      e.preventDefault();
+      const editId = document.getElementById('owner-edit-id').value;
+      const title = document.getElementById('owner-place-title').value.trim();
+      const location = document.getElementById('owner-location').value.trim() || 'Perú';
+      const publishDate = document.getElementById('owner-publish-date').value.trim() || 'Noviembre 2026';
+      const videoTag = document.getElementById('owner-video-tag').value.trim() || 'Guía Visual';
+      const cover = document.getElementById('owner-cover-url').value.trim();
+      const shortDesc = document.getElementById('owner-short-desc').value.trim();
+
+      if (editId) {
+        const idx = guides.findIndex(g => g.id === editId);
+        if (idx > -1) {
+          guides[idx].title = title;
+          guides[idx].location = location;
+          guides[idx].publishDate = publishDate;
+          guides[idx].videoTag = videoTag;
+          guides[idx].cover = cover;
+          guides[idx].shortDesc = shortDesc;
+          if (pendingUploadedHtml) guides[idx].htmlContent = pendingUploadedHtml;
+        }
+        showToast('Guía actualizada en la nube');
+      } else {
+        const newGuide = {
+          id: 'g-' + Date.now(),
+          title,
+          location,
+          publishDate,
+          videoTag,
+          cover,
+          shortDesc,
+          likes: 0,
+          useful: 0,
+          views: 0,
+          downloads: 0,
+          comments: [],
+          htmlContent: pendingUploadedHtml || '<html><body><h1>' + title + '</h1></body></html>'
+        };
+        guides.unshift(newGuide);
+        showToast('¡Guía agregada a Firebase!');
+      }
+
+      resetOwnerForm();
+      saveData();
+      renderPosters();
+      renderOwnerDashboard();
+    }
+
+    function editGuideInOwnerPanel(id) {
+      const g = guides.find(item => item.id === id);
+      if (!g) return;
+      document.getElementById('owner-edit-id').value = g.id;
+      document.getElementById('owner-place-title').value = g.title;
+      document.getElementById('owner-location').value = g.location;
+      document.getElementById('owner-publish-date').value = g.publishDate || '';
+      document.getElementById('owner-video-tag').value = g.videoTag || '';
+      document.getElementById('owner-cover-url').value = g.cover;
+      document.getElementById('owner-short-desc').value = g.shortDesc || '';
+      document.getElementById('owner-submit-label').textContent = 'Guardar Cambios';
+      window.scrollTo({ top: 200, behavior: 'smooth' });
+    }
+
+    function deleteGuideFromOwnerPanel(id) {
+      guides = guides.filter(g => g.id !== id);
+      saveData();
+      renderPosters();
+      renderOwnerDashboard();
+      showToast('Guía eliminada');
+    }
+
+    function resetAllMetricsToZero() {
+      guides.forEach(g => { g.likes = 0; g.useful = 0; g.views = 0; g.downloads = 0; });
+      siteConfig.yapeClicks = 0;
+      userReacts = {};
+      saveData();
+      renderPosters();
+      renderOwnerDashboard();
+      showToast('Contadores reiniciados');
+    }
+
+    function resetOwnerForm() {
+      document.getElementById('owner-edit-id').value = '';
+      document.getElementById('owner-place-title').value = '';
+      document.getElementById('owner-location').value = '';
+      document.getElementById('owner-publish-date').value = '';
+      document.getElementById('owner-video-tag').value = '';
+      document.getElementById('owner-cover-url').value = '';
+      document.getElementById('owner-short-desc').value = '';
+      document.getElementById('uploaded-filename').textContent = 'Ningún archivo seleccionado';
+      document.getElementById('owner-submit-label').textContent = 'Guardar Guía en Catálogo';
+      pendingUploadedHtml = '';
+    }
+
+    function saveYapeAndPinConfig(e) {
+      e.preventDefault();
+      siteConfig.yapePhone = document.getElementById('cfg-yape-phone').value.trim();
+      siteConfig.yapeHolder = document.getElementById('cfg-yape-name').value.trim() || 'Jean Pixels';
+      siteConfig.yapeQrUrl = document.getElementById('cfg-yape-qr').value.trim();
+      siteConfig.communityUrl = document.getElementById('cfg-community-url').value.trim();
+      siteConfig.contactWhatsapp = document.getElementById('cfg-contact-whatsapp').value.trim();
+      siteConfig.ownerPin = document.getElementById('cfg-owner-pin').value.trim() || '464615';
+
+      const commLink = document.getElementById('community-whatsapp-link');
+      if (commLink) commLink.href = siteConfig.communityUrl;
+
+      saveData();
+      showToast('Configuración guardada en Firebase');
+    }
+
+    function toggleAdsVisibility() {
+      siteConfig.showAds = document.getElementById('cfg-show-ads').checked;
+      saveData();
+      renderSponsors();
+      showToast(siteConfig.showAds ? 'Anuncios activados' : 'Anuncios ocultos');
+    }
+
+    function addSponsorAd(e) {
+      e.preventDefault();
+      const title = document.getElementById('ad-title').value.trim();
+      const badge = document.getElementById('ad-badge').value.trim() || 'Recomendado';
+      const desc = document.getElementById('ad-desc').value.trim();
+      const link = document.getElementById('ad-link').value.trim() || '#contacto';
+
+      if (!siteConfig.sponsors) siteConfig.sponsors = [];
+      siteConfig.sponsors.push({ id: 'ad-' + Date.now(), title, badge, desc, link });
+      siteConfig.showAds = true;
+      document.getElementById('cfg-show-ads').checked = true;
+
+      saveData();
+      renderSponsors();
+      renderOwnerDashboard();
+      e.target.reset();
+      showToast('Anuncio guardado');
+    }
+
+    function deleteSponsorAd(id) {
+      siteConfig.sponsors = (siteConfig.sponsors || []).filter(a => a.id !== id);
+      saveData();
+      renderSponsors();
+      renderOwnerDashboard();
+    }
+
+    function renderOwnerDashboard() {
+      const totalViews = guides.reduce((acc, g) => acc + (g.views || 0), 0);
+      const totalDownloads = guides.reduce((acc, g) => acc + (g.downloads || 0), 0);
+      const totalReactions = guides.reduce((acc, g) => acc + (g.likes || 0) + (g.useful || 0), 0);
+
+      document.getElementById('metric-views').textContent = totalViews;
+      document.getElementById('metric-downloads').textContent = totalDownloads;
+      document.getElementById('metric-reactions').textContent = totalReactions;
+      document.getElementById('metric-yape').textContent = siteConfig.yapeClicks || 0;
+
+      const listEl = document.getElementById('owner-guides-list');
+      listEl.innerHTML = guides.map(g => `
+        <div class="liquid-glass p-3.5 rounded-2xl flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <img src="${g.cover}" alt="${g.title}" class="w-11 h-16 object-cover rounded-lg shrink-0 border border-white/15" />
+            <div class="min-w-0">
+              <h4 class="font-hero font-bold text-sm truncate">${g.title}</h4>
+              <p class="text-[11px] truncate" style="color: var(--text-secondary);">${g.location}</p>
+              <div class="flex items-center gap-3 mt-1 text-[11px] text-amber-300">
+                <span>👁️ ${g.views || 0}</span>
+                <span>⬇️ ${g.downloads || 0}</span>
+                <span>❤️ ${g.likes || 0}</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="editGuideInOwnerPanel('${g.id}')" class="px-2.5 py-1.5 rounded-lg liquid-glass text-xs hover:border-amber-400">Editar</button>
+            <button onclick="deleteGuideFromOwnerPanel('${g.id}')" class="px-2.5 py-1.5 rounded-lg liquid-glass text-xs text-red-400 hover:border-red-500">Borrar</button>
+          </div>
+        </div>
+      `).join('');
+
+      const adsListEl = document.getElementById('owner-ads-list');
+      if (adsListEl) {
+        if (!siteConfig.sponsors || siteConfig.sponsors.length === 0) {
+          adsListEl.innerHTML = `<p class="text-xs italic" style="color: var(--text-secondary);">No hay ningún anuncio creado.</p>`;
+        } else {
+          adsListEl.innerHTML = siteConfig.sponsors.map(ad => `
+            <div class="liquid-glass px-3.5 py-2.5 rounded-xl flex items-center justify-between text-xs">
+              <div class="truncate pr-2"><strong class="text-amber-300">${ad.title}</strong></div>
+              <button onclick="deleteSponsorAd('${ad.id}')" class="text-red-400 hover:underline shrink-0">Quitar</button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function exportUpdatedSiteForGoogleSites() {
+      showPublicView();
+      document.getElementById('owner-active-pill').classList.add('hidden');
+      document.getElementById('owner-active-pill').classList.remove('flex');
+
+      let fullSource = document.documentElement.outerHTML;
+      document.getElementById('owner-active-pill').classList.remove('hidden');
+      document.getElementById('owner-active-pill').classList.add('flex');
+      toggleOwnerView();
+
+      const blob = new Blob([fullSource], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      showToast('¡Archivo index.html limpio descargado para subir a GitHub!');
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('contact-name').value.trim();
+      const whatsapp = document.getElementById('contact-whatsapp').value.trim();
+      const msg = document.getElementById('contact-msg').value.trim();
+
+      if (siteConfig.contactWhatsapp) {
+        const cleanPhone = siteConfig.contactWhatsapp.replace(/\D/g, '');
+        const text = encodeURIComponent(`Hola Jean Pixels! Soy ${name} (${whatsapp}). ${msg}`);
+        window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
+      }
+
+      showToast('¡Mensaje enviado!');
+      e.target.reset();
+    }
+
+    let toastTimer;
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = text;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add('hidden'), 4200);
+    }
+  </script>
+</body>
+</html>
